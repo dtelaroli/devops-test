@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - set -e
+      - echo "Starting build"
+      - IMAGE_TAG=$(echo $${CODEBUILD_RESOLVED_SOURCE_VERSION} | cut -c 1-7)
+      - $(aws ecr get-login --no-include-email --region ${region})
+  build:
+    commands:
+      - cd api
+      - docker build -t ${repository_url}:$${IMAGE_TAG} .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push ${repository_url}:$${IMAGE_TAG}
+      - docker tag ${repository_url}:$${IMAGE_TAG} ${repository_url}:latest
+      - docker push ${repository_url}:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"${container_name}","imageUri":"%s"}]' ${repository_url}:$${IMAGE_TAG} > imagedefinitions.json
+      - zip definitions.zip imagedefinitions.json
+artifacts:
+  files: definitions.zip

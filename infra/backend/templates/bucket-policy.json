@@ -1,0 +1,22 @@
+{
+    "Version": "2012-10-17",
+    "Id": "Policy1561729181822",
+    "Statement": [
+        {
+            "Sid": "Stmt1561729179238",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::885381610217:root",
+                    "arn:aws:iam::649449869710:root",
+                    "arn:aws:iam::384576502279:root"
+                ]
+            },
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${company}-devops",
+                "arn:aws:s3:::${company}-devops/*"
+            ]
+        }
+    ]
+}
