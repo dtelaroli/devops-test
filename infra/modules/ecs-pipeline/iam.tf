@@ -51,6 +51,15 @@ resource "aws_iam_role_policy" "codebuild" {
     {
       "Effect": "Allow",
       "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ecr:BatchCheckLayerAvailability",
         "ecr:CompleteLayerUpload",
         "ecr:GetAuthorizationToken",
@@ -60,7 +69,7 @@ resource "aws_iam_role_policy" "codebuild" {
         "ecs:UpdateService"
       ],
       "Resource": [
-        "*"
+        "${var.ecr_repository.arn}"
       ]
     },
     {
