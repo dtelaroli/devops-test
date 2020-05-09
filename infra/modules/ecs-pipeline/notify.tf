@@ -1,7 +1,6 @@
 resource "aws_codestarnotifications_notification_rule" "build" {
   detail_type = "BASIC"
   event_type_ids = [
-    "codebuild-project-build-state-succeeded",
     "codebuild-project-build-state-failed"
   ]
 
@@ -17,7 +16,6 @@ resource "aws_codestarnotifications_notification_rule" "pipeline" {
   detail_type = "BASIC"
   event_type_ids = [
     "codepipeline-pipeline-pipeline-execution-failed",
-    "codepipeline-pipeline-pipeline-execution-succeeded"
   ]
 
   name     = "${var.name}-notify-pipeline"
