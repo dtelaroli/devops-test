@@ -12,14 +12,15 @@ resource "aws_alb_listener" "this" {
 }
 
 resource "aws_alb_target_group" "this" {
-  name                     = var.container_name
-  port                     = var.container_port
-  protocol                 = "HTTP"
-  vpc_id                   = var.vpc_id
-  target_type              = "ip"
+  name        = var.container_name
+  port        = var.container_port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
 
   health_check {
-    path                = "/"
+    path                = "/.well-known/apollo/server-health"
+    port                = var.container_port
     interval            = 10
     healthy_threshold   = 3
     unhealthy_threshold = 3

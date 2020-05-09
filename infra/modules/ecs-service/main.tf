@@ -70,8 +70,8 @@ resource "aws_ecs_service" "this" {
   }
 
   network_configuration {
-    security_groups = [aws_security_group.this.id]
-    subnets         = var.subnet_ids
+    security_groups  = [aws_security_group.this.id]
+    subnets          = var.subnet_ids
   }
 
 

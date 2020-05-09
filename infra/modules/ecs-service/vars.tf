@@ -35,6 +35,10 @@ variable "alb_port" {
   description = "Load Balancer Port"
 }
 
+variable "alb_security_group_id" {
+  description = "Load Balancer Security Group"
+}
+
 variable "desired_count" {
   description = "desired count"
 }
