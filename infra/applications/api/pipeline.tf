@@ -1,5 +1,5 @@
 module "pipeline" {
-  source = "../modules/ecs-pipeline"
+  source = "../../modules/ecs-pipeline"
 
   env            = local.env
   name           = local.name

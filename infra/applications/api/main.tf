@@ -1,5 +1,5 @@
 module "ecs-service" {
-  source = "../modules/ecs-service"
+  source = "../../modules/ecs-service"
 
   providers = {
     aws = aws.virginia
