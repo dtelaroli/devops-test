@@ -12,6 +12,9 @@
     "secrets": [
       ${secrets}
     ],
+    "environment": [
+      ${container_env_vars}
+    ],
     "memory": ${container_memory},
     "cpu": ${container_cpu},
     "logConfiguration": {

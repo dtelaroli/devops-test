@@ -36,13 +36,14 @@ data "template_file" "this" {
   template = file("./tasks/task_base.json")
 
   vars = {
-    container_name   = var.container_name
-    container_port   = var.container_port
-    container_memory = var.container_memory
-    container_cpu    = var.container_cpu
-    repository_url   = aws_ecr_repository.this.repository_url
-    secrets          = var.secrets
-    log_group        = aws_cloudwatch_log_group.this.name
+    container_name     = var.container_name
+    container_port     = var.container_port
+    container_memory   = var.container_memory
+    container_env_vars = var.container_env_vars
+    container_cpu      = var.container_cpu
+    repository_url     = aws_ecr_repository.this.repository_url
+    secrets            = var.secrets
+    log_group          = aws_cloudwatch_log_group.this.name
   }
 }
 

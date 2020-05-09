@@ -9,6 +9,12 @@ module "ecs-service" {
   container_port        = local.port
   container_cpu         = local.cpu
   container_memory      = local.memory
+  container_env_vars    = <<ENV_VARS
+    {
+      "name": "SQS_NOTIFICATION_NAME",
+      "value": "${local.sqs_name}"
+    }
+  ENV_VARS
   desired_count         = "0"
   cluster_name          = local.cluster_name
   subnet_ids            = local.subnets

@@ -53,24 +53,7 @@ resource "aws_iam_policy" "this" {
       "Effect": "Allow",
       "Action": "sqs:*",
       "Resource": "arn:aws:sqs:${local.region}:*:*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "s3:*",
-      "Resource": [
-        "arn:aws:s3:::liftpay-conciliation",
-        "arn:aws:s3:::liftpay-conciliation/*",
-        "arn:aws:s3:::${local.env}-billet",
-        "arn:aws:s3:::${local.env}-billet/*"
-      ]
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
-          "ses:SendEmail"
-        ],
-        "Resource": "*"
-      }
+    }
   ]
 }
 EOF
