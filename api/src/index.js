@@ -8,15 +8,19 @@ const bodyParser = require("body-parser");
 const server = new ApolloServer({
   cors: true,
   typeDefs,
-  resolvers,
-  context,
-  trace: false
+  resolvers
 });
 
 const app = express();
 // Additional middleware can be mounted at this point to run before Apollo.
-app.use(bodyParser.text());
 
-server.applyMiddleware({ app, path: "/" });
+app.use(bodyParser.text());
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+  console.log(req.body);
+  next();
+});
+
+server.applyMiddleware({ app, path: "/graphql" });
 
 module.exports = app;
