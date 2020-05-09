@@ -1,5 +1,6 @@
 const GraphQLJSON = require("graphql-type-json");
 const uuid = require("uuid/v4");
+const { eventNames, pubsub } = require("./pubsub");
 
 const messages = [];
 
@@ -33,6 +34,12 @@ const updateMessage = (root, { input }, context) => {
 
 const resolvers = {
   JSON: GraphQLJSON,
+  Subscription: {
+    onCreateMessage: {
+      // Additional event labels can be passed to asyncIterator creation
+      subscribe: () => pubsub.asyncIterator([eventNames.ON_CREATE_MESSAGE])
+    }
+  },
   Query: {
     listMessages: () => messages,
     getMessage: (root, { id }, context) => {
@@ -45,4 +52,4 @@ const resolvers = {
   }
 };
 
-module.exports = resolvers;
+module.exports = { resolvers, pubsub };

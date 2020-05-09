@@ -1,5 +1,5 @@
 const { ApolloServer } = require("apollo-server-express");
-const { typeDefs, resolvers, context } = require("./graphql");
+const { typeDefs, resolvers, pubsub } = require("./graphql");
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -13,12 +13,15 @@ const server = new ApolloServer({
 
 const app = express();
 // Additional middleware can be mounted at this point to run before Apollo.
-
-app.use(bodyParser.text());
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-  console.log(req.body);
-  next();
+app.use(bodyParser.text());
+
+app.use("/notify", (req, res, next) => {
+  const body = JSON.parse(req.body);
+  const { event, method } = body;
+  console.log(body);
+  pubsub.publish(event, method);
+  res.redirect(body.SubscribeURL);
 });
 
 server.applyMiddleware({ app, path: "/graphql" });

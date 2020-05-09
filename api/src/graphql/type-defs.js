@@ -41,6 +41,10 @@ const typeDefs = gql`
     createMessage(input: CreateMessageInput!): Message
     updateMessage(input: UpdateMessageInput!): Message
   }
+
+  type Subscription {
+    onCreateMessage(input: CreateMessageInput): Message
+  }
 `;
 
 module.exports = typeDefs;
