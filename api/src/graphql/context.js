@@ -1,11 +1,13 @@
 const { config } = require("../lib");
 
 const context = params => {
-  const { headers, body } = params.req;
-  console.log(JSON.stringify({ headers, body }, null, 2));
-  if (headers["x-amz-sns-topic-arn"] === config.NOTIFICATION_ARN) {
-    params.res.redirect(body.SubscribeURL);
-    return params;
+  const { body } = params.req;
+
+  if (typeof body === "string") {
+    const json = JSON.parse(body);
+    if (json.TopicArn === config.NOTIFICATION_ARN) {
+      params.res.redirect(json.SubscribeURL);
+    }
   }
 };
 

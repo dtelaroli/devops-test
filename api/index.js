@@ -1,6 +1,6 @@
-const api = require("./src");
+const server = require("./src");
 
 // The `listen` method launches a web server.
-api.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+server.listen({ port: 4000 }, () => {
+  console.log(`🚀  Server ready`);
 });
