@@ -1,0 +1,23 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Api eCommerce Program",
+      "program": "${workspaceFolder}/src/app.local.js",
+      "envFile": "${workspaceFolder}/src/.credentials",
+      "env": {
+        "REGION": "us-east-1",
+        "ENV": "dev",
+        "GRAPHQL_ENDPOINT": "https://5vgcsovitnh3veic3qeezo75wq.appsync-api.us-east-1.amazonaws.com/graphql",
+        "PAYZEN_URL": "https://api.payzen.com.br/api-payment/V4",
+        "GATEWAY_CALLBACK_URL": "https://gateway.dev.liftpay.com.br/v1/payment/form/callback"
+      }
+    }
+  ]
+}

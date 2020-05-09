@@ -19,7 +19,7 @@ module "ecs-service" {
       "value": "${aws_sns_topic.this.arn}"
     }
   ENV_VARS
-  desired_count         = "0"
+  desired_count         = "1"
   cluster_name          = local.cluster_name
   subnet_ids            = local.subnets
   vpc_id                = local.vpc_id

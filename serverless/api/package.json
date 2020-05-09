@@ -1,0 +1,37 @@
+{
+  "name": "hello_world",
+  "version": "1.0.0",
+  "description": "Lambda Express NodeJS",
+  "main": "app.js",
+  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
+  "author": "SAM CLI",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "aws-serverless-express": "^3.3.8",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-validation": "^3.0.2",
+    "graphql-tag": "^2.10.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "scripts": {
+    "start": "node app.local.js",
+    "test": "jest",
+    "debug": "node app.local.js",
+    "login": "aws-vault exec denilson-prd -d 12h -- env | grep AWS > .credentials"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.665.0",
+    "chai": "^4.2.0",
+    "jest": "^25.5.1",
+    "jest-express": "^1.12.0",
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
+  }
+}

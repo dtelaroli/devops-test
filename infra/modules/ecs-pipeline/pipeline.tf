@@ -38,7 +38,6 @@ resource "aws_codepipeline" "this" {
       configuration = {
         NotificationArn    = var.sns_arn
         CustomData         = "Approve Deploy to ECS"
-        ExternalEntityLink = var.git_repository
       }
     }
   }

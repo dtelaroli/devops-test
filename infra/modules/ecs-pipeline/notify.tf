@@ -17,8 +17,7 @@ resource "aws_codestarnotifications_notification_rule" "pipeline" {
   detail_type = "BASIC"
   event_type_ids = [
     "codepipeline-pipeline-pipeline-execution-failed",
-    "codepipeline-pipeline-pipeline-execution-succeeded",
-    "codepipeline-pipeline-manual-approval-needed"
+    "codepipeline-pipeline-pipeline-execution-succeeded"
   ]
 
   name     = "${var.name}-notify-pipeline"

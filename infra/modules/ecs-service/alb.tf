@@ -12,11 +12,12 @@ resource "aws_alb_listener" "this" {
 }
 
 resource "aws_alb_target_group" "this" {
-  name        = var.container_name
-  port        = var.container_port
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = "ip"
+  name                 = var.container_name
+  port                 = var.container_port
+  protocol             = "HTTP"
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
+  deregistration_delay = "120"
 
   health_check {
     path                = "/.well-known/apollo/server-health"

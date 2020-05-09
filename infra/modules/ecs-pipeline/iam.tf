@@ -134,6 +134,11 @@ resource "aws_iam_role_policy" "codepipeline" {
         "iam:PassRole"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "sns:Publish",
+      "Resource": "*"
     }
   ]
 }
