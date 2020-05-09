@@ -40,19 +40,13 @@ resource "aws_iam_policy" "this" {
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "ssm:GetParametersByPath",
-        "secretsmanager:GetSecretValue",
-        "kms:Decrypt"
-      ],
-      "Resource": [
-        "arn:aws:ssm:${local.region}:*:parameter/config/${local.name}*"
-      ]
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.notification.arn}"
     },
     {
       "Effect": "Allow",
-      "Action": "sqs:*",
-      "Resource": "arn:aws:sqs:${local.region}:*:*"
+      "Action": "SNS:Receive",
+      "Resource": "${aws_sns_topic.this.arn}"
     }
   ]
 }
@@ -60,8 +54,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "this" {
-  name = "${local.name}-policy-attachment"
+  name       = "${local.name}-policy-attachment"
   roles      = [aws_iam_role.this.name]
   policy_arn = aws_iam_policy.this.arn
 }
-

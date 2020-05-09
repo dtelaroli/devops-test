@@ -13,6 +13,10 @@ module "ecs-service" {
     {
       "name": "SQS_NOTIFICATION_NAME",
       "value": "${local.sqs_name}"
+    },
+    {
+      "name": "SNS_NOTIFICATION_ARN",
+      "value": "${aws_sns_topic.this.arn}"
     }
   ENV_VARS
   desired_count         = "0"

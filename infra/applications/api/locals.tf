@@ -11,6 +11,7 @@ locals {
   cluster_name          = data.terraform_remote_state.base.outputs.ecs_cluster_name
   sns_arn               = data.terraform_remote_state.base.outputs.sns_arn
   alb_arn               = data.terraform_remote_state.base.outputs.alb_arn
+  dns_name               = data.terraform_remote_state.base.outputs.alb_dns_name
   alb_security_group_id = data.terraform_remote_state.base.outputs.alb_security_group_id
   alb_port              = 80
   cpu                   = "256"
@@ -21,4 +22,5 @@ locals {
   subnets        = data.terraform_remote_state.base.outputs.private_subnets
   git_repository = "https://github.com/dtelaroli/devops-test.git"
   sqs_name       = "${local.name}-notification"
+  sns_name       = "${local.name}-notification"
 }
