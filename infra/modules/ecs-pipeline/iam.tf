@@ -130,13 +130,6 @@ resource "aws_iam_role_policy" "codepipeline" {
     {
       "Effect": "Allow",
       "Action": [
-        "ecr:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
         "ecs:*",
         "iam:PassRole"
       ],

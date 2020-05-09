@@ -41,3 +41,7 @@ output "ecs_cluster_name" {
 output "alb_security_group_id" {
   value = aws_security_group.this.id
 }
+
+output "sns_arn" {
+  value = aws_sns_topic.this.arn
+}

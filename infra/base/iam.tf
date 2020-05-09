@@ -30,3 +30,21 @@ resource "aws_iam_role_policy_attachment" "ecs" {
   role       = aws_iam_role.ecs.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+data "aws_iam_policy_document" "this" {
+  statement {
+    actions = ["sns:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["codestar-notifications.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.this.arn]
+  }
+}
+
+resource "aws_sns_topic_policy" "default" {
+  arn    = aws_sns_topic.this.arn
+  policy = data.aws_iam_policy_document.this.json
+}

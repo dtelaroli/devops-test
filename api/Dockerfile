@@ -16,11 +16,11 @@ WORKDIR /home/node/app
 # Bundle app source code
 COPY --chown=node . ./  
 
-RUN npm install
+RUN yarn
 # RUN npm run test
 
 # Bind to all network interfaces so that it can be mapped to the host OS
 ENV HOST=0.0.0.0 PORT=4000
 
 EXPOSE ${PORT}
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]

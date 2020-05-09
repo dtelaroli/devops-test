@@ -9,7 +9,7 @@ module "ecs-service" {
   container_port        = local.port
   container_cpu         = local.cpu
   container_memory      = local.memory
-  desired_count         = "1"
+  desired_count         = "0"
   cluster_name          = local.cluster_name
   subnet_ids            = local.subnets
   vpc_id                = local.vpc_id

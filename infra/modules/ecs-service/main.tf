@@ -59,19 +59,22 @@ resource "aws_ecs_task_definition" "this" {
 
 resource "aws_ecs_service" "this" {
   name                              = var.container_name
+  cluster                           = var.cluster_name
   task_definition                   = aws_ecs_task_definition.this.arn
   desired_count                     = var.desired_count
   health_check_grace_period_seconds = 0
   launch_type                       = "FARGATE"
-  cluster                           = var.cluster_name
 
   lifecycle {
-    ignore_changes = [desired_count, task_definition]
+    ignore_changes = [
+      # desired_count,
+      task_definition
+    ]
   }
 
   network_configuration {
-    security_groups  = [aws_security_group.this.id]
-    subnets          = var.subnet_ids
+    security_groups = [aws_security_group.this.id]
+    subnets         = var.subnet_ids
   }
 
 

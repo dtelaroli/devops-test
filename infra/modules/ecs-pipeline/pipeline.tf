@@ -10,18 +10,6 @@ resource "aws_codepipeline" "this" {
   stage {
     name = "Source"
 
-    # action {
-    #   name             = "Source"
-    #   category         = "Source"
-    #   owner            = "AWS"
-    #   provider         = "ECR"
-    #   version          = "1"
-    #   output_artifacts = ["imagedefinitions"]
-
-    #   configuration = {
-    #     RepositoryName = var.ecr_repository.name
-    #   }
-    # }
     action {
       name             = "Source"
       category         = "Source"
@@ -31,8 +19,26 @@ resource "aws_codepipeline" "this" {
       output_artifacts = ["imagedefinitions"]
       configuration = {
         S3Bucket             = aws_s3_bucket.this.id
-        S3ObjectKey          = "${aws_codebuild_project.this.name}/definitions.zip"
+        S3ObjectKey          = "${aws_codebuild_project.this.name}/api/definitions.zip"
         PollForSourceChanges = true
+      }
+    }
+  }
+
+  stage {
+    name = "Approve"
+
+    action {
+      name     = "Approval"
+      category = "Approval"
+      owner    = "AWS"
+      provider = "Manual"
+      version  = "1"
+
+      configuration = {
+        NotificationArn    = var.sns_arn
+        CustomData         = "Approve Deploy to ECS"
+        ExternalEntityLink = var.git_repository
       }
     }
   }

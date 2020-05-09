@@ -10,6 +10,7 @@ module "pipeline" {
   cluster_name   = local.cluster_name
   service_name   = local.name
   container_name = local.name
+  sns_arn        = local.sns_arn
   buildspec      = data.template_file.buildspec.rendered
 }
 

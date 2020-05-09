@@ -19,3 +19,5 @@ variable "service_name" {}
 variable "region" {}
 
 variable "buildspec" {}
+
+variable "sns_arn" {}
