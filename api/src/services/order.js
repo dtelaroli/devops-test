@@ -1,7 +1,5 @@
-const { dynamoDB, config } = require("../lib");
+const { dynamoDB, config, dateUtil } = require("../lib");
 const uuid = require("uuid/v4");
-
-const date = new Date().toISOString();
 
 const getOrder = id => {
   return dynamoDB.get(config.ORDER_TABLE_NAME, id);
@@ -12,6 +10,7 @@ const listOrders = params => {
 };
 
 const createOrder = async input => {
+  const date = dateUtil();
   const order = {
     id: uuid(),
     status: "NEW",
@@ -30,11 +29,26 @@ const createOrder = async input => {
 };
 
 const updateOrder = async input => {
+  const updatedAt = dateUtil();
+  let updateLogs = input.updateLogs;
+
+  if (!updateLogs) {
+    const [error, res] = await getOrder(input.id);
+
+    if (error) {
+      throw error;
+    }
+
+    updateLogs = JSON.parse(res.updateLogs);
+  }
+
+  updateLogs.push({ status: input.status, updatedAt });
   const order = {
-    updatedAt: date,
+    updatedAt,
+    updateLogs: JSON.stringify(updateLogs),
     ...input
   };
-  
+
   return dynamoDB.update(config.ORDER_TABLE_NAME, order);
 };
 
