@@ -6,7 +6,16 @@ const { typeDefs, resolvers } = require("./graphql");
 const server = new ApolloServer({
   cors: true,
   typeDefs,
-  resolvers
+  resolvers,
+  debug: true,
+  tracing: true,
+  plugins: [
+    {
+      requestDidStart({ request }) {
+        // console.log(request.query, request.variables);
+      }
+    }
+  ]
 });
 
 module.exports = server;

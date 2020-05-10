@@ -34,23 +34,29 @@ resource "aws_iam_role_policy_attachment" "ecs" {
 resource "aws_iam_policy" "this" {
   name = "${local.name}-ecs-policy"
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "sqs:SendMessage",
-      "Resource": "${aws_sqs_queue.notification.arn}"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "SNS:Receive",
-      "Resource": "${aws_sns_topic.this.arn}"
-    }
-  ]
-}
-EOF
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "sqs:SendMessage",
+        "Resource": [
+          "${aws_sqs_queue.create_order.arn}"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem"
+        ],
+        "Resource": [
+          "${aws_dynamodb_table.order.arn}"
+        ]
+      }
+    ]
+  })
 }
 
 resource "aws_iam_policy_attachment" "this" {

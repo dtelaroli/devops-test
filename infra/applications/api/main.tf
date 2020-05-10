@@ -11,12 +11,12 @@ module "ecs-service" {
   container_memory      = local.memory
   container_env_vars    = <<ENV_VARS
     {
-      "name": "SQS_NOTIFICATION_NAME",
-      "value": "${local.sqs_name}"
+      "name": "SQS_CREATE_ORDER",
+      "value": "${local.sqs_create_order}"
     },
     {
-      "name": "SNS_NOTIFICATION_ARN",
-      "value": "${aws_sns_topic.this.arn}"
+      "name": "SQS_NOTIFY_ORDER",
+      "value": "${local.sqs_notify_order}"
     }
   ENV_VARS
   desired_count         = "1"

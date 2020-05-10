@@ -4,11 +4,6 @@ const typeDefs = gql`
   scalar JSON
   scalar DateTime
 
-  type StatusLog {
-    id: ID
-    body: String
-  }
-
   enum Status {
     NEW
     PAID
@@ -18,34 +13,44 @@ const typeDefs = gql`
 
   type Order {
     id: ID
-    productId: String!
     value: Float!
     status: Status!
     createdAt: DateTime
     updatedAt: DateTime
+    updateLogs: JSON
+  }
+
+  type OrderList {
+    items: [Order]
+    nextToken: String
+    total: Int
   }
 
   type Query {
-    listOrders: [Order]
+    listOrders: OrderList
     getOrder(id: ID!): Order
   }
 
   input CreateOrderInput {
     id: ID
-    productId: String!
     value: Float!
   }
 
   input UpdateOrderInput {
     id: ID!
-    productId: String
     value: Float
+    status: Status
+  }
+
+  input PayOrderInput {
+    id: ID!
     status: Status
   }
 
   type Mutation {
     createOrder(input: CreateOrderInput!): Order
     updateOrder(input: UpdateOrderInput!): Order
+    payOrder(input: PayOrderInput!): Order
   }
 
   type Subscription {

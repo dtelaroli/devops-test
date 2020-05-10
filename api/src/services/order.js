@@ -1,37 +1,41 @@
-const ORDERS = [];
+const { dynamoDB, config } = require("../lib");
+const uuid = require("uuid/v4");
 
-const findOrder = id => {
-  return ORDERS.filter(m => m.id === id)[0];
-};
+const date = new Date().toISOString();
 
 const getOrder = id => {
-  return findOrder(id);
+  return dynamoDB.get(config.ORDER_TABLE_NAME, id);
 };
 
-const listOrders = () => {
-  return ORDERS;
+const listOrders = params => {
+  return dynamoDB.list(config.ORDER_TABLE_NAME, params);
 };
 
-const createOrder = order => {
-  ORDERS.push(order);
-  return ORDERS;
+const createOrder = async input => {
+  const order = {
+    id: uuid(),
+    status: "NEW",
+    createdAt: date,
+    updatedAt: date,
+    updateLogs: JSON.stringify([
+      {
+        status: "NEW",
+        date
+      }
+    ]),
+    ...input
+  };
+
+  return dynamoDB.create(config.ORDER_TABLE_NAME, order);
 };
 
-const updateOrder = order => {
-  const index = ORDERS.findIndex(obj => obj.id === order.id);
-
-  if (index < 0) {
-    throw new Error("ID not found");
-  }
-
-  const date = new Date().toISOString();
-  ORDERS[index].updatedAt = date;
-
-  for (let i in order) {
-    ORDERS[index][i] = order[i];
-  }
-
-  return ORDERS[index];
+const updateOrder = async input => {
+  const order = {
+    updatedAt: date,
+    ...input
+  };
+  
+  return dynamoDB.update(config.ORDER_TABLE_NAME, order);
 };
 
 module.exports = {

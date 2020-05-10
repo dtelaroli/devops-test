@@ -1,4 +1,3 @@
-const uuid = require("uuid/v4");
 const pubsub = require("../graphql/pubsub");
 const { orderService } = require("../services");
 
@@ -7,27 +6,33 @@ const eventNames = {
   ON_UPDATE_ORDER: "ON_UPDATE_ORDER"
 };
 
-const getOrder = (root, { id }, context) => {
-  return orderService.getOrder(id);
+const getOrder = async (root, { id }) => {
+  const [error, order] = await orderService.getOrder(id);
+
+  if (error) {
+    throw error;
+  }
+
+  return order;
 };
 
-const listOrders = () => {
-  return orderService.listOrders();
+const listOrders = async () => {
+  const [error, orderList] = await orderService.listOrders();
+
+  if (error) {
+    throw error;
+  }
+
+  return orderList;
 };
 
-const createOrder = (root, { input }, context) => {
-  const date = new Date().toISOString();
+const createOrder = async (root, { input }) => {
+  const [error, order] = await orderService.createOrder(input);
 
-  const order = {
-    id: uuid(),
-    status: "NEW",
-    createdAt: date,
-    updatedAt: date,
-    ...input
-  };
+  if (error) {
+    throw error;
+  }
 
-  orderService.createOrder(order);
-  
   pubsub.publish(eventNames.ON_CREATE_ORDER, {
     onCreateOrder: order
   });
@@ -35,13 +40,22 @@ const createOrder = (root, { input }, context) => {
   return order;
 };
 
-const updateOrder = (root, { input }, context) => {
-  const order = orderService.updateOrder(input);
-  
+const updateOrder = async (root, { input }) => {
+  const [error, order] = await orderService.updateOrder(input);
+
+  if (error) {
+    throw error;
+  }
+
   pubsub.publish(eventNames.ON_UPDATE_ORDER, {
     onUpdateOrder: order
   });
 
+  return order;
+};
+
+const payOrder = (root, { input }) => {
+  const order = orderService.payOrder(input);
   return order;
 };
 
@@ -64,6 +78,7 @@ module.exports = {
   },
   mutations: {
     createOrder,
-    updateOrder
+    updateOrder,
+    payOrder
   }
 };
