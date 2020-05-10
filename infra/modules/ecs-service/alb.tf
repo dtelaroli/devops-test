@@ -23,7 +23,7 @@ resource "aws_alb_target_group" "this" {
     path                = "/.well-known/apollo/server-health"
     port                = var.container_port
     interval            = 10
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
   }
 }

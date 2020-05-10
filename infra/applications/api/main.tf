@@ -11,6 +11,14 @@ module "ecs-service" {
   container_memory      = local.memory
   container_env_vars    = <<ENV_VARS
     {
+      "name": "REGION",
+      "value": "${local.region}"
+    },
+    {
+      "name": "ENV",
+      "value": "${local.env}"
+    },
+    {
       "name": "SQS_CREATE_ORDER",
       "value": "${local.sqs_create_order}"
     },
@@ -19,7 +27,7 @@ module "ecs-service" {
       "value": "${local.sqs_notify_order}"
     },
     {
-      "name": "DYNAMO_TABLE_ORDER",
+      "name": "DYNAMO_ORDER_TABLE_NAME",
       "value": "${local.dynamo_table_order}"
     }
   ENV_VARS
