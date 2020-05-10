@@ -17,6 +17,10 @@ module "ecs-service" {
     {
       "name": "SQS_NOTIFY_ORDER",
       "value": "${local.sqs_notify_order}"
+    },
+    {
+      "name": "DYNAMO_TABLE_ORDER",
+      "value": "${local.dynamo_table_order}"
     }
   ENV_VARS
   desired_count         = "1"

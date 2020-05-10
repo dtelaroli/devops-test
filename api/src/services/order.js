@@ -2,11 +2,11 @@ const { dynamoDB, config, dateUtil } = require("../lib");
 const uuid = require("uuid/v4");
 
 const getOrder = id => {
-  return dynamoDB.get(config.ORDER_TABLE_NAME, id);
+  return dynamoDB.get(config.DYNAMO_ORDER_TABLE_NAME, id);
 };
 
 const listOrders = params => {
-  return dynamoDB.list(config.ORDER_TABLE_NAME, params);
+  return dynamoDB.list(config.DYNAMO_ORDER_TABLE_NAME, params);
 };
 
 const createOrder = async input => {
@@ -25,7 +25,7 @@ const createOrder = async input => {
     ...input
   };
 
-  return dynamoDB.create(config.ORDER_TABLE_NAME, order);
+  return dynamoDB.create(config.DYNAMO_ORDER_TABLE_NAME, order);
 };
 
 const updateOrder = async input => {
@@ -49,7 +49,7 @@ const updateOrder = async input => {
     ...input
   };
 
-  return dynamoDB.update(config.ORDER_TABLE_NAME, order);
+  return dynamoDB.update(config.DYNAMO_ORDER_TABLE_NAME, order);
 };
 
 module.exports = {
