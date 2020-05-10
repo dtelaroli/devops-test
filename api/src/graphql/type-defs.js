@@ -43,7 +43,8 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    onCreateMessage(input: CreateMessageInput): Message
+    onCreateMessage: Message
+    onUpdateMessage: Message
   }
 `;
 

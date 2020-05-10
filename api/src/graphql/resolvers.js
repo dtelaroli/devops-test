@@ -14,6 +14,9 @@ const createMessage = (root, { input }, context) => {
   }
 
   messages.push(input);
+  pubsub.publish(eventNames.ON_CREATE_MESSAGE, {
+    onCreateMessage: input
+  });
 
   return findMessage(input.id);
 };
@@ -28,6 +31,9 @@ const updateMessage = (root, { input }, context) => {
   for (let i in input) {
     messages[index][i] = input[i];
   }
+  pubsub.publish(eventNames.ON_UPDATE_MESSAGE, {
+    onUpdateMessage: messages[index]
+  });
 
   return messages[index];
 };
@@ -38,6 +44,10 @@ const resolvers = {
     onCreateMessage: {
       // Additional event labels can be passed to asyncIterator creation
       subscribe: () => pubsub.asyncIterator([eventNames.ON_CREATE_MESSAGE])
+    },
+    onUpdateMessage: {
+      // Additional event labels can be passed to asyncIterator creation
+      subscribe: () => pubsub.asyncIterator([eventNames.ON_UPDATE_MESSAGE])
     }
   },
   Query: {

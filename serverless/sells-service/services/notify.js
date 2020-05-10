@@ -10,14 +10,14 @@ const paid = async postData => {
 
 const start = async postData => {
   return await sns(NOTIFICATION_ARN, {
-    event: "SHIPPING_START",
+    event: "ON_CREATE_MESSAGE",
     ...postData
   });
 };
 
 const end = async postData => {
   return await sns(NOTIFICATION_ARN, {
-    event: "SHIPPING_END",
+    event: "ON_UPDATE_MESSAGE",
     ...postData
   });
 };
