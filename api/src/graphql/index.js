@@ -1,8 +1,9 @@
-const { resolvers, pubsub } = require("./resolvers");
+const resolvers = require("./resolvers");
+const pubsub = require("./pubsub");
 const typeDefs = require("./type-defs");
 
 module.exports = {
   resolvers,
-  typeDefs,
-  pubsub
+  pubsub,
+  typeDefs
 };

@@ -2,49 +2,55 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   scalar JSON
+  scalar DateTime
 
-  type Log {
+  type StatusLog {
     id: ID
     body: String
   }
 
-  type Message {
+  enum Status {
+    NEW
+    PAID
+    SHIPPING
+    FINISHED
+  }
+
+  type Order {
     id: ID
-    to: String
-    subject: String
-    content: String
-    logs: JSON
+    productId: String!
+    value: Float!
+    status: Status!
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   type Query {
-    listMessages: [Message]
-    getMessage(id: ID!): Message
+    listOrders: [Order]
+    getOrder(id: ID!): Order
   }
 
-  input CreateMessageInput {
+  input CreateOrderInput {
     id: ID
-    to: String!
-    subject: String!
-    content: String!
-    logs: JSON
+    productId: String!
+    value: Float!
   }
 
-  input UpdateMessageInput {
+  input UpdateOrderInput {
     id: ID!
-    to: String
-    subject: String
-    content: String
-    logs: JSON
+    productId: String
+    value: Float
+    status: Status
   }
 
   type Mutation {
-    createMessage(input: CreateMessageInput!): Message
-    updateMessage(input: UpdateMessageInput!): Message
+    createOrder(input: CreateOrderInput!): Order
+    updateOrder(input: UpdateOrderInput!): Order
   }
 
   type Subscription {
-    onCreateMessage: Message
-    onUpdateMessage: Message
+    onCreateOrder: Order
+    onUpdateOrder: Order
   }
 `;
 
