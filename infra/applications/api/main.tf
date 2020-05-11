@@ -5,32 +5,11 @@ module "ecs-service" {
     aws = aws.virginia
   }
 
-  container_name        = local.name
+  cpu                   = "512"
+  memory                = "1024"
+  container_name        = local.container_name
   container_port        = local.port
-  container_cpu         = local.cpu
-  container_memory      = local.memory
-  container_env_vars    = <<ENV_VARS
-    {
-      "name": "REGION",
-      "value": "${local.region}"
-    },
-    {
-      "name": "ENV",
-      "value": "${local.env}"
-    },
-    {
-      "name": "SQS_CREATE_ORDER",
-      "value": "${local.sqs_create_order}"
-    },
-    {
-      "name": "SQS_NOTIFY_ORDER",
-      "value": "${local.sqs_notify_order}"
-    },
-    {
-      "name": "DYNAMO_ORDER_TABLE_NAME",
-      "value": "${local.dynamo_table_order}"
-    }
-  ENV_VARS
+  container_definitions = local.container_definitions
   desired_count         = "1"
   cluster_name          = local.cluster_name
   subnet_ids            = local.subnets

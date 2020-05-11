@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "sqs-consumer": "^5.4.0"
+  }
+}

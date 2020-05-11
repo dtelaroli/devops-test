@@ -1,59 +1,10 @@
-resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/ecs/${var.container_name}"
-  retention_in_days = "30"
-}
-
-
-resource "aws_ecr_repository" "this" {
-  name = var.container_name
-}
-
-resource "aws_ecr_lifecycle_policy" "this" {
-  repository = aws_ecr_repository.this.name
-
-  policy = <<EOF
-{
-  "rules": [
-    {
-      "rulePriority": 1,
-      "description": "Expire images older than 3 days",
-      "selection": {
-        "tagStatus": "untagged",
-        "countType": "sinceImagePushed",
-        "countUnit": "days",
-        "countNumber": 3
-      },
-      "action": {
-        "type": "expire"
-      }
-    }
-  ]
-}
-EOF
-}
-
-data "template_file" "this" {
-  template = file("./tasks/task_base.json")
-
-  vars = {
-    container_name     = var.container_name
-    container_port     = var.container_port
-    container_memory   = var.container_memory
-    container_env_vars = var.container_env_vars
-    container_cpu      = var.container_cpu
-    repository_url     = aws_ecr_repository.this.repository_url
-    secrets            = var.secrets
-    log_group          = aws_cloudwatch_log_group.this.name
-  }
-}
-
 resource "aws_ecs_task_definition" "this" {
   family                   = var.container_name
-  container_definitions    = data.template_file.this.rendered
+  container_definitions    = var.container_definitions
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = var.container_cpu
-  memory                   = var.container_memory
+  cpu                      = var.cpu
+  memory                   = var.memory
   execution_role_arn       = var.ecs_iam_role_arn
   task_role_arn            = var.ecs_iam_role_arn
 }

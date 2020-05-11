@@ -35,23 +35,29 @@ resource "aws_iam_policy" "this" {
   name = "${local.name}-ecs-policy"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": "sqs:SendMessage",
-        "Resource": [
-          "${aws_sqs_queue.create_order.arn}"
+        "Effect" : "Allow",
+        "Action" : [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage"
+        ]
+        "Resource" : [
+          "${aws_sqs_queue.create_order.arn}",
+          "${aws_sqs_queue.notify_order.arn}"
         ]
       },
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "dynamodb:GetItem",
           "dynamodb:PutItem",
-          "dynamodb:UpdateItem"
+          "dynamodb:UpdateItem",
+          "dynamodb:Scan"
         ],
-        "Resource": [
+        "Resource" : [
           "${aws_dynamodb_table.order.arn}"
         ]
       }

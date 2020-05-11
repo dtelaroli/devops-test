@@ -1,3 +1,3 @@
-output "repository" {
-  value = aws_ecr_repository.this
+output "security_group" {
+  value = aws_security_group.this.id
 }

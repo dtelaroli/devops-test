@@ -19,12 +19,12 @@ variable "container_port" {
   description = "Container Port"
 }
 
-variable "container_cpu" {
-  description = "Container CPU"
+variable "cpu" {
+  description = "Service CPU"
 }
 
-variable "container_memory" {
-  description = "Container memory"
+variable "memory" {
+  description = "Service memory"
 }
 
 variable "alb_arn" {
@@ -52,4 +52,7 @@ variable "ecs_iam_role_arn" {
 
 variable "container_env_vars" {
   default = ""
+}
+
+variable "container_definitions" {
 }
