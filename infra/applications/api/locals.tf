@@ -20,6 +20,7 @@ locals {
   container_name        = local.name
   container_name_worker = "worker"
   container_port        = 4000
+  elasticache_port      = 6379
   # memoryReservation     = "512"
   port = "4000"
 
