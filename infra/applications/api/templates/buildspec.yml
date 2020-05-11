@@ -12,7 +12,7 @@ phases:
       - $(aws ecr get-login --no-include-email --region ${region})
   build:
     commands:
-      - cd api
+      - cd backend
       - docker build -t ${repository_url}:$${IMAGE_TAG} .
   post_build:
     commands:
@@ -25,4 +25,4 @@ phases:
       - printf '[{"name":"${container_name}","imageUri":"%s"}]' ${repository_url}:$${IMAGE_TAG} > imagedefinitions.json
       - zip definitions.zip imagedefinitions.json
 artifacts:
-  files: api/definitions.zip
+  files: backend/definitions.zip
