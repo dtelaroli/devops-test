@@ -1,5 +1,7 @@
-const notify = require("./notify");
+const paymentService = require("./payment");
+const shippingService = require("./shipping");
 
 module.exports = {
-  notify
+  paymentService,
+  shippingService
 };

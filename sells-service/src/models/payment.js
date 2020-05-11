@@ -1,10 +1,10 @@
 const Joi = require("@hapi/joi");
 const { validate } = require("express-validation");
 
-const shipping = {
+const payment = {
   body: Joi.object({
     id: Joi.string().required()
   })
 };
 
-module.exports = validate(shipping);
+module.exports = validate(payment);

@@ -1,5 +1,36 @@
 {
+  "name": "sells-service",
+  "version": "1.0.0",
+  "description": "Sells Service NodeJS",
+  "main": "app.js",
+  "author": "Denilson Telaroli",
+  "license": "MIT",
   "dependencies": {
-    "sqs-consumer": "^5.4.0"
+    "@hapi/joi": "^17.1.1",
+    "await-to-js": "^2.1.1",
+    "aws-serverless-express": "^3.3.8",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-validation": "^3.0.2",
+    "graphql-tag": "^2.10.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "scripts": {
+    "start": "node app.local.js",
+    "test": "jest",
+    "debug": "node app.local.js",
+    "login": "aws-vault exec liftpay-dev -d 12h -- env | grep AWS > .credentials"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.665.0",
+    "chai": "^4.2.0",
+    "jest": "^25.5.1",
+    "jest-express": "^1.12.0",
+    "supertest": "^4.0.2"
   }
 }

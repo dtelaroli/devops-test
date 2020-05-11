@@ -3,7 +3,7 @@ const router = express.Router();
 const { shipping } = require("../controllers");
 const { shippingModel } = require("../models");
 
-router.post("/start", shippingModel, shipping.start);
-router.post("/end", shippingModel, shipping.end);
+router.post("/", shippingModel, shipping.create);
+router.post("/confirmation", shippingModel, shipping.confirmation);
 
 module.exports = router;

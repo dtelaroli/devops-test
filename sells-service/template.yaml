@@ -56,7 +56,7 @@ Resources:
         Variables:
           REGION: !Ref region
           ENV: !Ref env
-          NOTIFICATION_ARN: !Ref notificationArn
+          SQS_NOTIFY_URL: !Ref notificationArn
           FRONTEND_URL: !Ref frontendUrl
 
   LambdaExecutionRole:

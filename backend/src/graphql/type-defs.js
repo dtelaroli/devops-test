@@ -6,6 +6,7 @@ const typeDefs = gql`
 
   enum Status {
     NEW
+    PAYMENT
     PAID
     SHIPPING
     FINISHED

@@ -1,8 +1,8 @@
-const { notify } = require("../services");
+const { shippingService } = require("../services");
 
-const start = async (req, res, next) => {
+const create = async (req, res, next) => {
   try {
-    const [error, result] = await notify.start(req.body);
+    const [error, result] = await shippingService.create(req.body.id);
 
     if (error) {
       throw error;
@@ -14,9 +14,9 @@ const start = async (req, res, next) => {
   }
 };
 
-const end = async (req, res, next) => {
+const confirmation = async (req, res, next) => {
   try {
-    const [error, result] = await notify.end(req.body);
+    const [error, result] = await shippingService.confirmation(req.body.id);
 
     if (error) {
       throw error;
@@ -29,6 +29,6 @@ const end = async (req, res, next) => {
 };
 
 module.exports = {
-  start,
-  end
+  create,
+  confirmation
 };

@@ -1,8 +1,22 @@
-const { notify } = require("../services");
+const { paymentService } = require("../services");
 
-const paid = async (req, res, next) => {
+const create = async (req, res, next) => {
   try {
-    const [error, result] = await notify.start(req.body);
+    const [error, result] = await paymentService.create(req.body.id);
+
+    if (error) {
+      throw error;
+    }
+
+    res.status(200).json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
+const confirmation = async (req, res, next) => {
+  try {
+    const [error, result] = await paymentService.confirmation(req.body.id);
 
     if (error) {
       throw error;
@@ -15,5 +29,6 @@ const paid = async (req, res, next) => {
 };
 
 module.exports = {
-  paid
+  create,
+  confirmation
 };
