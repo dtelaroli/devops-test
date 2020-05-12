@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
+    "start": "aws-vault exec denilson-prd -d 12h -- node .",
     "api": "node ./src/api/",
     "worker": "node ./src/worker/",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,7 +16,6 @@
     "apollo-server": "^2.13.0",
     "await-to-js": "^2.1.1",
     "aws-sdk": "^2.673.0",
-    "graphql": "^15.0.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-redis-subscriptions": "^2.2.1",
     "graphql-type-json": "^0.3.1",

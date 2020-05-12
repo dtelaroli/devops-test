@@ -8,7 +8,7 @@ export const MainRouter = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <Checkout />
         </Route>
         <Route path="/payment">
