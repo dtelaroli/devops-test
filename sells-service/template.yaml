@@ -89,7 +89,7 @@ Resources:
         Variables:
           REGION: !Ref region
           ENV: !Ref env
-          STATE_MACHINE_ARN: !Ref SellStateMachine
+          # STATE_MACHINE_ARN: !Ref SellStateMachine
           FRONTEND_URL: !Ref frontendUrl
 
   PayOrderFunction:
@@ -110,7 +110,7 @@ Resources:
         Variables:
           REGION: !Ref region
           ENV: !Ref env
-          STATE_MACHINE_ARN: !Ref SellStateMachine
+          # STATE_MACHINE_ARN: !Ref SellStateMachine
 
   PaymentFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
