@@ -171,6 +171,10 @@ Resources:
                 Resource: "*"
               - Effect: Allow
                 Action:
+                  - "sqs:ReceiveMessage"
+                Resource: !Ref sqsCreateArn
+              - Effect: Allow
+                Action:
                   - "states:StartExecution"
                 Resource: "*"
 
