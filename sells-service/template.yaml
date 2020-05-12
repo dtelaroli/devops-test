@@ -209,107 +209,107 @@ Resources:
                   - "logs:*"
                 Resource: "*"
                 
-  SellStateMachine:
-    Type: "AWS::StepFunctions::StateMachine"
-    Properties:
-      RoleArn: !GetAtt StatesExecutionRole.Arn
-      DefinitionString: !Sub
-        - |-
-          {
-            "Comment": "Service to orcherstrate customers registration",
-            "StartAt": "Payment",
-            "States":{
-              "Payment": {
-                "Type": "Task",
-                "Resource": "${paymentFunctionArn}",
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
-                "Next": "WaitPaymentPostback",
-              },
-              "WaitPaymentPostback": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
-                "HeartbeatSeconds": ${heartbeatSeconds},
-                "Parameters": {
-                  "QueueUrl": "${waitPaymentPostbackQueueUrl}",
-                  "MessageBody": {
-                    "input.$": "$",
-                    "taskToken.$": "$$.Task.Token"
-                  }
-                },
-                "Next": "NotifyPayment"
-              },
-              "NotifyPayment":{
-                "Type": "Task",
-                "Resource": "arn:aws:states:::sqs:sendMessage",
-                "Parameters": {
-                  "QueueUrl": "${sqsNotifyPaymentUrl}",
-                  "MessageBody.$": "$.input"
-                },
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
-                "Next": "Shipping"
-              },
-              "Shipping":{
-                "Type": "Task",
-                "Resource": "${shippingFunctionArn}",
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
-                "Next":"WaitShippingPostback"
-              },
-              "WaitShippingPostback": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
-                "HeartbeatSeconds": ${heartbeatSeconds},
-                "Parameters": {
-                  "QueueUrl": "${waitShippingPostbackQueueUrl}",
-                  "MessageBody": {
-                    "input.$": "$",
-                    "taskToken.$": "$$.Task.Token"
-                  }
-                },
-                "Next": "NotifyShipping"
-              },
-              "NotifyShipping":{
-                "Type":"Task",
-                "Resource": "arn:aws:states:::sqs:sendMessage",
-                "Parameters": {
-                  "QueueUrl": "${sqsNotifyPaymentUrl}",
-                  "MessageBody.$": "$"
-                },
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
-                "End": true
-              },
-            }
-          }
-        - {
-            paymentFunctionArn: !GetAtt PaymentFunction.Arn,
-            shippingFunctionArn: !GetAtt ShippingFunction.Arn,
-            waitPaymentPostbackQueueUrl: !Ref WaitPaymentPostbackQueue,
-            waitShippingPostbackQueueUrl: !Ref WaitShippingPostbackQueue,
-            sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,
-            heartbeatSeconds: !Ref heartbeatSeconds,
-            intervalSeconds: !Ref intervalSeconds,
-            maxAttempts: !Ref maxAttempts,
-            backoffRate: !Ref backoffRate
-          }
+  # SellStateMachine:
+  #   Type: "AWS::StepFunctions::StateMachine"
+  #   Properties:
+  #     RoleArn: !GetAtt StatesExecutionRole.Arn
+  #     DefinitionString: !Sub
+  #       - |-
+  #         {
+  #           "Comment": "Service to orcherstrate customers registration",
+  #           "StartAt": "Payment",
+  #           "States":{
+  #             "Payment": {
+  #               "Type": "Task",
+  #               "Resource": "${paymentFunctionArn}",
+  #               "Retry": [{
+  #                 "ErrorEquals": [ "States.All" ],
+  #                 "IntervalSeconds": ${intervalSeconds},
+  #                 "MaxAttempts": ${maxAttempts},
+  #                 "BackoffRate": ${backoffRate}
+  #               }],
+  #               "Next": "WaitPaymentPostback",
+  #             },
+  #             "WaitPaymentPostback": {
+  #               "Type": "Task",
+  #               "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+  #               "HeartbeatSeconds": ${heartbeatSeconds},
+  #               "Parameters": {
+  #                 "QueueUrl": "${waitPaymentPostbackQueueUrl}",
+  #                 "MessageBody": {
+  #                   "input.$": "$",
+  #                   "taskToken.$": "$$.Task.Token"
+  #                 }
+  #               },
+  #               "Next": "NotifyPayment"
+  #             },
+  #             "NotifyPayment":{
+  #               "Type": "Task",
+  #               "Resource": "arn:aws:states:::sqs:sendMessage",
+  #               "Parameters": {
+  #                 "QueueUrl": "${sqsNotifyPaymentUrl}",
+  #                 "MessageBody.$": "$.input"
+  #               },
+  #               "Retry": [{
+  #                 "ErrorEquals": [ "States.All" ],
+  #                 "IntervalSeconds": ${intervalSeconds},
+  #                 "MaxAttempts": ${maxAttempts},
+  #                 "BackoffRate": ${backoffRate}
+  #               }],
+  #               "Next": "Shipping"
+  #             },
+  #             "Shipping":{
+  #               "Type": "Task",
+  #               "Resource": "${shippingFunctionArn}",
+  #               "Retry": [{
+  #                 "ErrorEquals": [ "States.All" ],
+  #                 "IntervalSeconds": ${intervalSeconds},
+  #                 "MaxAttempts": ${maxAttempts},
+  #                 "BackoffRate": ${backoffRate}
+  #               }],
+  #               "Next":"WaitShippingPostback"
+  #             },
+  #             "WaitShippingPostback": {
+  #               "Type": "Task",
+  #               "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+  #               "HeartbeatSeconds": ${heartbeatSeconds},
+  #               "Parameters": {
+  #                 "QueueUrl": "${waitShippingPostbackQueueUrl}",
+  #                 "MessageBody": {
+  #                   "input.$": "$",
+  #                   "taskToken.$": "$$.Task.Token"
+  #                 }
+  #               },
+  #               "Next": "NotifyShipping"
+  #             },
+  #             "NotifyShipping":{
+  #               "Type":"Task",
+  #               "Resource": "arn:aws:states:::sqs:sendMessage",
+  #               "Parameters": {
+  #                 "QueueUrl": "${sqsNotifyPaymentUrl}",
+  #                 "MessageBody.$": "$"
+  #               },
+  #               "Retry": [{
+  #                 "ErrorEquals": [ "States.All" ],
+  #                 "IntervalSeconds": ${intervalSeconds},
+  #                 "MaxAttempts": ${maxAttempts},
+  #                 "BackoffRate": ${backoffRate}
+  #               }],
+  #               "End": true
+  #             }
+  #           }
+  #         }
+  #       - {
+  #           paymentFunctionArn: !GetAtt PaymentFunction.Arn,
+  #           shippingFunctionArn: !GetAtt ShippingFunction.Arn,
+  #           waitPaymentPostbackQueueUrl: !Ref WaitPaymentPostbackQueue,
+  #           waitShippingPostbackQueueUrl: !Ref WaitShippingPostbackQueue,
+  #           sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,
+  #           heartbeatSeconds: !Ref heartbeatSeconds,
+  #           intervalSeconds: !Ref intervalSeconds,
+  #           maxAttempts: !Ref maxAttempts,
+  #           backoffRate: !Ref backoffRate
+  #         }
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -318,6 +318,6 @@ Outputs:
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
     Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}/hello/"
-  StateMachineArn:
-    Description: "Sell State Machine Arn"
-    Value: !Ref SellStateMachine
+  # StateMachineArn:
+  #   Description: "Sell State Machine Arn"
+  #   Value: !Ref SellStateMachine
