@@ -255,7 +255,7 @@ Resources:
                 StackName: !Sub ${AWS::StackName}-${env}-sam-app
                 ChangeSetName: !Sub ${AWS::StackName}-update
                 RoleArn: !GetAtt CloudFormationRole.Arn
-                TemplatePath: "BuildArtifact::packaged-template.yml"
+                TemplatePath: "BuildArtifact::sells-service/packaged-template.yml"
                 Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
               RunOrder: 1
             - Name: ExecuteChangeSet
