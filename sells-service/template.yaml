@@ -17,14 +17,46 @@ Parameters:
     Type: "String"
     Description: Region
     Default: us-east-1
-  notificationArn:
+  heartbeatSeconds:
+    Type: "String"
+    Description: Default heartbeat in seconds
+    Default: 300
+  intervalSeconds:
+    Type: "String"
+    Description: Default interval in seconds
+    Default: 180
+  maxAttempts:
+    Type: "String"
+    Description: Default maxAttempts in seconds
+    Default: 3
+  backoffRate:
+    Type: "String"
+    Description: Default backoffRate in seconds
+    Default: 2.0
+  sqsCreateArn:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: SNS Notification Arn
-    Default: /config/api/sns-topic-arn
+    Default: /config/api/sqs-create-arn
+  sqsNotifyPaymentArn:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: SNS Notification Arn
+    Default: /config/api/sqs-notify-arn
+  sqsNotificationUrl:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: SNS Notification Arn
+    Default: /config/api/sqs-notify-url
   frontendUrl:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: Cloudfront URL
     Default: /config/frontend/url
+  gatewayUrl: 
+    Type: "String"
+    Description: Gateway URL
+    Default: /config/sells-service/gateway-url
+  courierUrl:
+    Type: "String"
+    Description: Courier URL
+    Default: /config/sells-service/courier-url
 
 Resources:
   API:
@@ -32,12 +64,12 @@ Resources:
     Properties:
       StageName: !Sub ${env}
 
-  ApiFunction:
+  PostbackFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       Role: !GetAtt LambdaExecutionRole.Arn
       CodeUri: src/
-      Handler: index.handler
+      Handler: handlers/postback.handler
       Runtime: nodejs12.x
       Events:
         ProxyApiRoot:
@@ -56,8 +88,66 @@ Resources:
         Variables:
           REGION: !Ref region
           ENV: !Ref env
-          SQS_NOTIFY_URL: !Ref notificationArn
+          STATE_MACHINE_ARN: !Ref SellStateMachine
           FRONTEND_URL: !Ref frontendUrl
+
+  PayOrderFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      CodeUri: src/
+      Handler: handlers/start-sell.handler
+      Runtime: nodejs12.x
+      Events:
+        WaitForAdiqQueue:
+          Type: SQS
+          Properties:
+            Queue: !Ref sqsCreateArn
+            BatchSize: 10
+            Enabled: true
+      Environment:
+        Variables:
+          REGION: !Ref region
+          ENV: !Ref env
+          STATE_MACHINE_ARN: !Ref SellStateMachine
+
+  PaymentFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      CodeUri: src/
+      Handler: handlers/payment.handler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          REGION: !Ref region
+          ENV: !Ref env
+          GATEWAY_URL: !Ref gatewayUrl
+
+  ShippingFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Role: !GetAtt LambdaExecutionRole.Arn
+      CodeUri: src/
+      Handler: handlers/shipping.handler
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          REGION: !Ref region
+          ENV: !Ref env
+          COURIER_URL: !Ref courierUrl
+
+  WaitPaymentPostbackQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 180
+      QueueName: sells-service-wait-payment-postback
+
+  WaitShippingPostbackQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 180
+      QueueName: sells-service-wait-shipping-postback
 
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -80,8 +170,145 @@ Resources:
                 Resource: "*"
               - Effect: Allow
                 Action:
-                  - "sns:publish"
-                Resource: !Ref notificationArn
+                  - "states:StartExecution"
+                Resource: !GetAtt SellStateMachine
+
+  StatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: 
+                  - !GetAtt PaymentFunction.Arn
+                  - !GetAtt ShippingFunction.Arn
+              - Effect: Allow
+                Action:
+                  - "sqs:SendMessage"
+                Resource: 
+                  - !GetAtt WaitPaymentPostbackQueue.Arn
+                  - !GetAtt WaitShippingPostbackQueue.Arn
+                  - !Ref sqsNotifyPaymentArn
+              - Effect: Allow
+                Action:
+                  - "logs:*"
+                Resource: "*"
+                
+  SellStateMachine:
+    Type: "AWS::StepFunctions::StateMachine"
+    Properties:
+      RoleArn: !GetAtt StatesExecutionRole.Arn
+      DefinitionString: !Sub
+        - |-
+          {
+            "Comment": "Service to orcherstrate customers registration",
+            "StartAt": "Payment",
+            "States":{
+              "Payment": {
+                "Type": "Task",
+                "Resource": "${paymentFunctionArn}",
+                "Retry": [{
+                  "ErrorEquals": [ "States.All" ],
+                  "IntervalSeconds": ${intervalSeconds},
+                  "MaxAttempts": ${maxAttempts},
+                  "BackoffRate": ${backoffRate}
+                }],
+                "Next": "WaitPaymentPostback",
+              },
+              "WaitPaymentPostback": {
+                "Type": "Task",
+                "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+                "HeartbeatSeconds": ${heartbeatSeconds},
+                "Parameters": {
+                  "QueueUrl": "${waitPaymentPostbackQueueUrl}",
+                  "MessageBody": {
+                    "input.$": "$",
+                    "taskToken.$": "$$.Task.Token"
+                  }
+                },
+                "Next": "NotifyPayment"
+              },
+              "NotifyPayment":{
+                "Type": "Task",
+                "Resource": "arn:aws:states:::sqs:sendMessage",
+                "Parameters": {
+                  "QueueUrl": "${sqsNotifyPaymentUrl}",
+                  "MessageBody.$": "$.input"
+                },
+                "Retry": [{
+                  "ErrorEquals": [ "States.All" ],
+                  "IntervalSeconds": ${intervalSeconds},
+                  "MaxAttempts": ${maxAttempts},
+                  "BackoffRate": ${backoffRate}
+                }],
+                "Next": "Shipping"
+              },
+              "Shipping":{
+                "Type": "Task",
+                "Resource": "${shippingFunctionArn}",
+                "Retry": [{
+                  "ErrorEquals": [ "States.All" ],
+                  "IntervalSeconds": ${intervalSeconds},
+                  "MaxAttempts": ${maxAttempts},
+                  "BackoffRate": ${backoffRate}
+                }],
+                "Next":"WaitShippingPostback"
+              },
+              "WaitShippingPostback": {
+                "Type": "Task",
+                "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+                "HeartbeatSeconds": ${heartbeatSeconds},
+                "Parameters": {
+                  "QueueUrl": "${waitShippingPostbackQueueUrl}",
+                  "MessageBody": {
+                    "input.$": "$",
+                    "taskToken.$": "$$.Task.Token"
+                  }
+                },
+                "Next": "NotifyShipping"
+              },
+              "NotifyShipping":{
+                "Type":"Task",
+                "Resource": "arn:aws:states:::sqs:sendMessage",
+                "Parameters": {
+                  "QueueUrl": "${sqsNotifyPaymentUrl}",
+                  "MessageBody.$": "$"
+                },
+                "Retry": [{
+                  "ErrorEquals": [ "States.All" ],
+                  "IntervalSeconds": ${intervalSeconds},
+                  "MaxAttempts": ${maxAttempts},
+                  "BackoffRate": ${backoffRate}
+                }],
+                "End": true
+              },
+            }
+          }
+        - {
+            paymentFunctionArn: !GetAtt AdiqFunction.Arn,
+            shippingFunctionArn: !GetAtt AdiqFunction.Arn,
+            waitPaymentPostbackQueueArn: !Ref WaitPaymentPostbackQueue,
+            waitShippingPostbackQueueArn: !Ref WaitShippingPostbackQueue,
+            sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,
+            heartbeatSeconds: !Ref heartbeatSeconds,
+            intervalSeconds: !Ref intervalSeconds,
+            maxAttempts: !Ref maxAttempts,
+            backoffRate: !Ref backoffRate
+          }
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -90,3 +317,6 @@ Outputs:
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${env}/hello/"
+  StateMachineArn:
+    Description: "Sell State Machine Arn"
+    Value: !GetAtt SellStateMachine.Arn

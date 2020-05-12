@@ -1,0 +1,242 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sam Pipeline
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 10
+
+Parameters:
+  env:
+    Type: "String"
+    Description: Env
+    Default: prd
+  region:
+    Type: "String"
+    Description: Region
+    Default: us-east-1
+  codestarConnection: 
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/global/codestar
+  branch:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/global/default-branch
+
+Resources:
+  BuildRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: LambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - "ec2:CreateNetworkInterface"
+                  - "ec2:DescribeDhcpOptions"
+                  - "ec2:DescribeNetworkInterfaces"
+                  - "ec2:DeleteNetworkInterface"
+                  - "ec2:DescribeSubnets"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DescribeVpcs"
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - "s3:*"
+                Resource:
+                  - !GetAtt ArtifactStoreBucket.Arn
+                  - !Sub ${ArtifactStoreBucket.Arn}/*
+
+  Build:
+    Type: AWS::CodeBuild::Project
+    Properties: 
+      Name: 
+        Fn::Join:
+          - "-"
+          - 
+            - !Sub ${AWS::StackName}
+            - !Ref env
+            - pipepline
+      Artifacts: 
+        Type: CODEPIPELINE
+      Description: Build Sam Project
+      Environment: 
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:2.0
+        PrivilegedMode: false
+        EnvironmentVariables:
+          - 
+            Type: PLAINTEXT
+            Name: BUCKET
+            Value: !Ref ArtifactStoreBucket
+          - 
+            Type: PLAINTEXT
+            Name: SAM_CLI_TELEMETRY
+            Value: 0
+
+      ServiceRole: !GetAtt BuildRole.Arn
+      Source: 
+        Type: CODEPIPELINE
+        GitCloneDepth: 1
+      TimeoutInMinutes: 10
+
+  PipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: ['sts:AssumeRole']
+          Effect: Allow
+          Principal:
+            Service: [codepipeline.amazonaws.com]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: CodePipelineAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Action:
+              - 'iam:PassRole'
+              Effect: Allow
+              Resource: '*'
+            - Effect: Allow
+              Action:
+              - "codebuild:StartBuild"
+              - "codebuild:BatchGetBuilds"
+              Resource:
+                - !GetAtt Build.Arn
+            - Action:
+              - 's3:*'
+              Effect: Allow
+              Resource:
+                - !GetAtt ArtifactStoreBucket.Arn
+                - !Sub ${ArtifactStoreBucket.Arn}/*
+            - Action:
+              - codestar-connections:UseConnection
+              Effect: Allow
+              Resource: !Ref codestarConnection
+            - Action:
+              - cloudformation:DescribeStacks
+              - cloudformation:DescribeChangeSet
+              - cloudformation:CreateChangeSet
+              - cloudformation:ExecuteChangeSet
+              - cloudformation:DeleteChangeSet
+              - ssm:GetParameters
+              Effect: Allow
+              Resource: "*"
+
+  CloudFormationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: ['sts:AssumeRole']
+          Effect: Allow
+          Principal:
+            Service: [cloudformation.amazonaws.com]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: CodePipelineAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Action:
+              - '*'
+              Effect: Allow
+              Resource: '*'
+
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location:
+          Ref: ArtifactStoreBucket
+      RoleArn: !GetAtt PipelineRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: CodeStarSourceConnection
+                Version: '1'
+              Configuration:
+                ConnectionArn: !Ref codestarConnection
+                FullRepositoryId: 
+                  "github"
+                BranchName: !Ref branch
+              OutputArtifacts:
+                - Name: SourceArtifact
+              RunOrder: '1'
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Configuration:
+                ProjectName: !Ref Build
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+              RunOrder: '1'
+        - Name: Deploy
+          Actions:
+            - Name: CreateChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              InputArtifacts:
+                - Name: BuildArtifact
+              Configuration:
+                ActionMode: CHANGE_SET_REPLACE
+                StackName: !Sub ${AWS::StackName}-${env}-sam-app
+                ChangeSetName: !Sub ${AWS::StackName}-update
+                RoleArn: !GetAtt CloudFormationRole.Arn
+                TemplatePath: "BuildArtifact::packaged-template.yml"
+                Capabilities: CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND
+              RunOrder: 1
+            - Name: ExecuteChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: CHANGE_SET_EXECUTE
+                StackName: !Sub ${AWS::StackName}-${env}-sam-app
+                ChangeSetName: !Sub ${AWS::StackName}-update
+                RoleArn: !GetAtt CloudFormationRole.Arn
+              RunOrder: 2
+
+  ArtifactStoreBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled

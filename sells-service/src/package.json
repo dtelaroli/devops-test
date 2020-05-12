@@ -2,7 +2,7 @@
   "name": "sells-service",
   "version": "1.0.0",
   "description": "Sells Service NodeJS",
-  "main": "app.js",
+  "main": "./handlers/app.js",
   "author": "Denilson Telaroli",
   "license": "MIT",
   "dependencies": {
@@ -21,9 +21,9 @@
     ]
   },
   "scripts": {
-    "start": "node app.local.js",
+    "start": "node ./handlers/app.local.js",
     "test": "jest",
-    "debug": "node app.local.js",
+    "debug": "node ./handlers/app.local.js",
     "login": "aws-vault exec liftpay-dev -d 12h -- env | grep AWS > .credentials"
   },
   "devDependencies": {

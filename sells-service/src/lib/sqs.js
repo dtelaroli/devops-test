@@ -1,6 +1,6 @@
-const AWS = require("./aws");
+const { AWS } = require("./aws");
 const { to } = require("await-to-js");
-const sqs = new AWS.SQS();
+const sqs = new SQS();
 
 const send = async (QueueUrl, Message) => {
   const params = {

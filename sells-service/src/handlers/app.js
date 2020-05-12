@@ -16,7 +16,7 @@ Amplify Params - DO NOT EDIT */
 const express = require("express");
 const bodyParser = require("body-parser");
 const awsServerlessExpressMiddleware = require("aws-serverless-express/middleware");
-const { cors, errorHandler } = require("./middlewares");
+const { cors, errorHandler } = require("../middlewares");
 
 // declare a new express app
 const app = express();
@@ -26,7 +26,7 @@ app.use(awsServerlessExpressMiddleware.eventContext());
 // Enable CORS for all methods
 // app.use(cors);
 
-const routes = require("./routes");
+const routes = require("../routes");
 
 for (let i in routes) {
   app.use(`/v1/${i}`, routes[i]);
