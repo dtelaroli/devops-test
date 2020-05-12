@@ -171,6 +171,7 @@ Resources:
                 Resource: "*"
               - Effect: Allow
                 Action:
+                  - "sqs:GetQueueAttributes"
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
                 Resource: !Ref sqsCreateArn
