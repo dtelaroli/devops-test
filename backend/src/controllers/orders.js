@@ -1,4 +1,4 @@
-const { pubsub } = require("../lib");
+const { pubsub, throwIfError } = require("../lib");
 const { orderService } = require("../services");
 
 const eventNames = {
@@ -9,9 +9,7 @@ const eventNames = {
 const getOrder = async (root, { id }) => {
   const [error, order] = await orderService.get(id);
 
-  if (error) {
-    throw error;
-  }
+  throwIfError(error);
 
   return order;
 };
@@ -19,9 +17,7 @@ const getOrder = async (root, { id }) => {
 const listOrders = async () => {
   const [error, orderList] = await orderService.list();
 
-  if (error) {
-    throw error;
-  }
+  throwIfError(error);
 
   return orderList;
 };
@@ -29,9 +25,7 @@ const listOrders = async () => {
 const createOrder = async (root, { input }) => {
   const [error, order] = await orderService.create(input);
 
-  if (error) {
-    throw error;
-  }
+  throwIfError(error);
 
   pubsub.publish(eventNames.ON_CREATE_ORDER, {
     onCreateOrder: order
@@ -43,11 +37,8 @@ const createOrder = async (root, { input }) => {
 const updateOrder = async (root, { input }) => {
   const [error, order] = await orderService.update(input);
 
-  if (error) {
-    throw error;
-  }
+  throwIfError(error);
 
-  console.log('update',input);
   pubsub.publish(eventNames.ON_UPDATE_ORDER, {
     onUpdateOrder: order
   });
@@ -55,9 +46,12 @@ const updateOrder = async (root, { input }) => {
   return order;
 };
 
-const payOrder = (root, { input }) => {
-  const order = orderService.pay(input);
-  return order;
+const payOrder = async (root, { input }) => {
+  const [error] = await orderService.pay(input);
+
+  throwIfError(error);
+
+  return "Pending - We will notify with subscription onUpdateOrder";
 };
 
 const subscriptions = {

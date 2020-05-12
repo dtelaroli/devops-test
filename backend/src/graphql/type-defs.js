@@ -45,13 +45,13 @@ const typeDefs = gql`
 
   input PayOrderInput {
     id: ID!
-    status: Status
+    cardHash: String!
   }
 
   type Mutation {
     createOrder(input: CreateOrderInput!): Order
     updateOrder(input: UpdateOrderInput!): Order
-    payOrder(input: PayOrderInput!): Order
+    payOrder(input: PayOrderInput!): String
   }
 
   type Subscription {

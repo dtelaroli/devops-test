@@ -1,4 +1,4 @@
-const { dynamoDB, config, dateUtil } = require("../lib");
+const { dynamoDB, config, dateUtil, sqs, throwIfError } = require("../lib");
 const uuid = require("uuid/v4");
 
 const get = id => {
@@ -35,9 +35,7 @@ const update = async input => {
   if (!updateLogs) {
     const [error, res] = await get(input.id);
 
-    if (error) {
-      throw error;
-    }
+    throwIfError(error);
 
     updateLogs = JSON.parse(res.updateLogs);
   }
@@ -52,9 +50,14 @@ const update = async input => {
   return dynamoDB.update(config.DYNAMO_ORDER_TABLE_NAME, order);
 };
 
+const pay = async input => {
+  return sqs(config.SQS_CREATE_ORDER_URL, input);
+};
+
 module.exports = {
   get,
   list,
   create,
-  update
+  update,
+  pay
 };

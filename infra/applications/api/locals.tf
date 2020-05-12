@@ -53,16 +53,12 @@ locals {
           "value" : local.env
         },
         {
-          "name" : "SQS_CREATE_ORDER",
-          "value" : local.sqs_create_order
-        },
-        {
-          "name" : "SQS_NOTIFY_ORDER",
-          "value" : local.sqs_notify_order
-        },
-        {
           "name" : "SQS_NOTIFY_ORDER_URL",
           "value" : data.aws_sqs_queue.notify_order.url
+        },
+        {
+          "name" : "SQS_CREATE_ORDER_URL",
+          "value" : data.aws_sqs_queue.create_order.url
         },
         {
           "name" : "DYNAMO_ORDER_TABLE_NAME",
@@ -107,16 +103,12 @@ locals {
           "value" : local.env
         },
         {
-          "name" : "SQS_CREATE_ORDER",
-          "value" : local.sqs_create_order
-        },
-        {
-          "name" : "SQS_NOTIFY_ORDER",
-          "value" : local.sqs_notify_order
-        },
-        {
           "name" : "SQS_NOTIFY_ORDER_URL",
           "value" : data.aws_sqs_queue.notify_order.url
+        },
+        {
+          "name" : "SQS_CREATE_ORDER_URL",
+          "value" : data.aws_sqs_queue.create_order.url
         },
         {
           "name" : "DYNAMO_ORDER_TABLE_NAME",

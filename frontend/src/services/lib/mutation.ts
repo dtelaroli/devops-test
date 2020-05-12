@@ -40,7 +40,7 @@ export default ({ literals, refetchQueries, showSuccess = false, onError }: Muta
   useEffect(() => {
     if (result.error) {
       // @ts-ignore
-      const errors = result.error.networkError.result.errors;
+      const errors = result.error.networkError?.result?.errors || [result.error];
       if (onError) {
         onError(errors);
       } else {

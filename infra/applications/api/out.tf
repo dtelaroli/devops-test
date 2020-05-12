@@ -2,6 +2,10 @@ output "sqs_notify_order_url" {
   value = data.aws_sqs_queue.notify_order.url
 }
 
+output "sqs_create_order_url" {
+  value = data.aws_sqs_queue.create_order.url
+}
+
 output "dynamo_order_table_name" {
   value = aws_dynamodb_table.order.name
 }

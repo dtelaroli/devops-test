@@ -36,6 +36,10 @@ resource "aws_ssm_parameter" "notify_order" {
   value = local.sqs_notify_order
 }
 
+data "aws_sqs_queue" "create_order" {
+  name = local.sqs_create_order
+}
+
 data "aws_sqs_queue" "notify_order" {
   name = local.sqs_notify_order
 }
