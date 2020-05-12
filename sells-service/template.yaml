@@ -96,7 +96,7 @@ Resources:
       Handler: handlers/start-sell.handler
       Runtime: nodejs12.x
       Events:
-        WaitForAdiqQueue:
+        CreateQueue:
           Type: SQS
           Properties:
             Queue: !Ref sqsCreateArn
@@ -296,8 +296,8 @@ Resources:
             }
           }
         - {
-            paymentFunctionArn: !GetAtt AdiqFunction.Arn,
-            shippingFunctionArn: !GetAtt AdiqFunction.Arn,
+            paymentFunctionArn: !GetAtt PaymentFunction.Arn,
+            shippingFunctionArn: !GetAtt ShippingFunction.Arn,
             waitPaymentPostbackQueueArn: !Ref WaitPaymentPostbackQueue,
             waitShippingPostbackQueueArn: !Ref WaitShippingPostbackQueue,
             sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,

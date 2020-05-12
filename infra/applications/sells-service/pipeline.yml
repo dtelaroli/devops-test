@@ -117,9 +117,8 @@ Resources:
           artifacts:
             files:
               - sells-service/packaged-template.yml
-
       TimeoutInMinutes: 10
-
+  
   PipelineRole:
     Type: AWS::IAM::Role
     Properties:
@@ -274,6 +273,18 @@ Resources:
                 ChangeSetName: !Sub ${AWS::StackName}-update
                 RoleArn: !GetAtt CloudFormationRole.Arn
               RunOrder: 2
+
+  PipelineNotification:
+    Type: AWS::CodeStarNotifications::NotificationRule
+    Properties: 
+      DetailType: BASIC
+      EventTypeIds: 
+        - codepipeline-pipeline-pipeline-execution-failed
+      Name: !Sub ${AWS::StackName}-${env}
+      Resource: !Sub "arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${Pipeline}"
+      Targets: 
+        - TargetType: SNS
+          TargetAddress: !Ref snsNotificationArn
 
   ArtifactStoreBucket:
     Type: AWS::S3::Bucket
