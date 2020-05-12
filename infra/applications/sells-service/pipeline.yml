@@ -23,6 +23,10 @@ Parameters:
   githubToken:
     Type: String
     Default: master
+  snsNotificationArn:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: SNS Notification Arn
+    Default: /config/global/sns-notification-arn
 
 Resources:
   BuildRole:
@@ -199,6 +203,18 @@ Resources:
                 - Name: SourceArtifact
               OutputArtifacts:
                 - Name: BuildArtifact
+              RunOrder: '1'
+        - Name: Approval
+          Actions:
+            - Name: Approval
+              ActionTypeId:
+                Category: Approval
+                Owner: AWS
+                Provider: Manual
+                Version: '1'
+              Configuration:
+                NotificationArn: !Ref snsNotificationArn
+                CustomData: "Approve Deploy to ECS"
               RunOrder: '1'
         - Name: Deploy
           Actions:

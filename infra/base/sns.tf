@@ -23,3 +23,9 @@ resource "aws_sns_topic_policy" "default" {
   arn    = aws_sns_topic.this.arn
   policy = data.aws_iam_policy_document.this.json
 }
+
+resource "aws_ssm_parameter" "create_order" {
+  name  = "/config/global/sns-notification-arn"
+  type  = "String"
+  value = aws_sns_topic.this.arn
+}

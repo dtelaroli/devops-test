@@ -35,15 +35,15 @@ Parameters:
     Default: 2.0
   sqsCreateArn:
     Type: "AWS::SSM::Parameter::Value<String>"
-    Description: SNS Notification Arn
+    Description: SQS Notification Arn
     Default: /config/api/sqs-create-arn
   sqsNotifyPaymentArn:
     Type: "AWS::SSM::Parameter::Value<String>"
-    Description: SNS Notification Arn
+    Description: SQS Notification Arn
     Default: /config/api/sqs-notify-arn
   sqsNotificationUrl:
     Type: "AWS::SSM::Parameter::Value<String>"
-    Description: SNS Notification Arn
+    Description: SQS Notification Arn
     Default: /config/api/sqs-notify-url
   frontendUrl:
     Type: "AWS::SSM::Parameter::Value<String>"
