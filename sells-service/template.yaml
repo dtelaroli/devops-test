@@ -320,4 +320,4 @@ Outputs:
     Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}/hello/"
   StateMachineArn:
     Description: "Sell State Machine Arn"
-    Value: !GetAtt SellStateMachine.Arn
+    Value: !Ref SellStateMachine
