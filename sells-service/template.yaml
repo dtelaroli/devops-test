@@ -172,7 +172,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "states:StartExecution"
-                Resource: !GetAtt SellStateMachine
+                Resource: !GetAtt SellStateMachine.Arn
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"

@@ -36,10 +36,10 @@ resource "aws_ssm_parameter" "notify_order" {
   value = local.sqs_notify_order
 }
 
-resource "aws_ssm_parameter" "notify_order" {
+resource "aws_ssm_parameter" "notify_order_url" {
   name  = "/config/api/sqs-notify-order-url"
   type  = "String"
-  value = aws_sqs_queue.notify_order.url
+  value = data.aws_sqs_queue.notify_order.url
 }
 
 data "aws_sqs_queue" "create_order" {
