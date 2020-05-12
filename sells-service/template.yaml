@@ -317,7 +317,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${env}/hello/"
+    Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}/hello/"
   StateMachineArn:
     Description: "Sell State Machine Arn"
     Value: !GetAtt SellStateMachine.Arn
