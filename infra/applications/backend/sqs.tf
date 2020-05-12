@@ -14,7 +14,7 @@ resource "aws_sqs_queue" "create_order" {
 resource "aws_ssm_parameter" "create_order" {
   name  = "/config/api/sqs-create-order"
   type  = "String"
-  value = local.sqs_create_order
+  value = aws_sqs_queue.create_order.arn
 }
 
 resource "aws_sqs_queue" "notify_dlq" {
@@ -33,7 +33,7 @@ resource "aws_sqs_queue" "notify_order" {
 resource "aws_ssm_parameter" "notify_order" {
   name  = "/config/api/sqs-notify-order"
   type  = "String"
-  value = local.sqs_notify_order
+  value = aws_sqs_queue.notify_order.arn
 }
 
 resource "aws_ssm_parameter" "notify_order_url" {
