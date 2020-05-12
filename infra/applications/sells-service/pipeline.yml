@@ -99,6 +99,25 @@ Resources:
       Source: 
         Type: CODEPIPELINE
         GitCloneDepth: 1
+        BuildSpec: |
+          version: 0.2
+          phases:
+            install:
+              runtime-versions:
+                  python: 3.7
+              commands:
+                - pip install --upgrade pip
+                - pip install pipenv --user
+                - pipenv install awscli aws-sam-cli
+            build:
+              commands:
+                - cd sells-service
+                - pipenv run sam build
+                - pipenv run sam package --template-file .aws-sam/build/template.yaml --s3-bucket ${BUCKET} --output-template-file packaged-template.yml
+          artifacts:
+            files:
+              - sells-service/packaged-template.yml
+
       TimeoutInMinutes: 10
 
   PipelineRole:
@@ -117,30 +136,35 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-            - Action:
-              - 'iam:PassRole'
-              Effect: Allow
+            - Effect: Allow
+              Action:
+                - 'iam:PassRole'
               Resource: '*'
             - Effect: Allow
               Action:
-              - "codebuild:StartBuild"
-              - "codebuild:BatchGetBuilds"
+                - "codebuild:StartBuild"
+                - "codebuild:BatchGetBuilds"
               Resource:
                 - !GetAtt Build.Arn
-            - Action:
-              - 's3:*'
-              Effect: Allow
+            - Effect: Allow
+              Action:
+                - 's3:*'
               Resource:
                 - !GetAtt ArtifactStoreBucket.Arn
                 - !Sub ${ArtifactStoreBucket.Arn}/*
-            - Action:
-              - cloudformation:DescribeStacks
-              - cloudformation:DescribeChangeSet
-              - cloudformation:CreateChangeSet
-              - cloudformation:ExecuteChangeSet
-              - cloudformation:DeleteChangeSet
-              - ssm:GetParameters
-              Effect: Allow
+            - Effect: Allow
+              Action:
+                - 'sns:Publish'
+              Resource:
+                - !Ref snsNotificationArn
+            - Effect: Allow
+              Action:
+                - cloudformation:DescribeStacks
+                - cloudformation:DescribeChangeSet
+                - cloudformation:CreateChangeSet
+                - cloudformation:ExecuteChangeSet
+                - cloudformation:DeleteChangeSet
+                - ssm:GetParameters
               Resource: "*"
 
   CloudFormationRole:
