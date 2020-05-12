@@ -41,6 +41,10 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: SQS Notification Arn
     Default: /config/api/sqs-notify-order
+  sqsNotifyPaymentUrl:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: SQS Notification Arn
+    Default: /config/api/sqs-notify-order-url
   frontendUrl:
     # Type: "AWS::SSM::Parameter::Value<String>"
     Type: "String"
@@ -298,8 +302,8 @@ Resources:
         - {
             paymentFunctionArn: !GetAtt PaymentFunction.Arn,
             shippingFunctionArn: !GetAtt ShippingFunction.Arn,
-            waitPaymentPostbackQueueArn: !Ref WaitPaymentPostbackQueue,
-            waitShippingPostbackQueueArn: !Ref WaitShippingPostbackQueue,
+            waitPaymentPostbackQueueUrl: !Ref WaitPaymentPostbackQueue,
+            waitShippingPostbackQueueUrl: !Ref WaitShippingPostbackQueue,
             sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,
             heartbeatSeconds: !Ref heartbeatSeconds,
             intervalSeconds: !Ref intervalSeconds,
