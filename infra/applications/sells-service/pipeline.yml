@@ -148,6 +148,10 @@ Resources:
                 - !GetAtt Build.Arn
             - Effect: Allow
               Action:
+                - "ssm:GetParameters"
+              Resource: "*"
+            - Effect: Allow
+              Action:
                 - 's3:*'
               Resource:
                 - !GetAtt ArtifactStoreBucket.Arn
