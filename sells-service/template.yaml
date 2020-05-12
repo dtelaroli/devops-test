@@ -172,6 +172,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "sqs:ReceiveMessage"
+                  - "sqs:DeleteMessage"
                 Resource: !Ref sqsCreateArn
               - Effect: Allow
                 Action:
