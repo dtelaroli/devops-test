@@ -234,7 +234,7 @@ Resources:
                   "MaxAttempts": ${maxAttempts},
                   "BackoffRate": ${backoffRate}
                 }],
-                "Next": "WaitPaymentPostback",
+                "Next": "WaitPaymentPostback"
               },
               "WaitPaymentPostback": {
                 "Type": "Task",
@@ -249,7 +249,7 @@ Resources:
                 },
                 "Next": "NotifyPayment"
               },
-              "NotifyPayment":{
+              "NotifyPayment": {
                 "Type": "Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
@@ -288,7 +288,7 @@ Resources:
                 },
                 "Next": "NotifyShipping"
               },
-              "NotifyShipping":{
+              "NotifyShipping": {
                 "Type":"Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
