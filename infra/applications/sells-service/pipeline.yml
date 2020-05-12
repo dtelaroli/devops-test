@@ -17,12 +17,12 @@ Parameters:
     Type: "String"
     Description: Region
     Default: us-east-1
-  codestarConnection: 
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: /config/global/codestar
   branch:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: /config/global/default-branch
+    Type: String
+    Default: master
+  githubToken:
+    Type: String
+    Default: master
 
 Resources:
   BuildRole:
@@ -130,10 +130,6 @@ Resources:
                 - !GetAtt ArtifactStoreBucket.Arn
                 - !Sub ${ArtifactStoreBucket.Arn}/*
             - Action:
-              - codestar-connections:UseConnection
-              Effect: Allow
-              Resource: !Ref codestarConnection
-            - Action:
               - cloudformation:DescribeStacks
               - cloudformation:DescribeChangeSet
               - cloudformation:CreateChangeSet
@@ -178,14 +174,14 @@ Resources:
             - Name: Source
               ActionTypeId:
                 Category: Source
-                Owner: AWS
-                Provider: CodeStarSourceConnection
+                Owner: ThirdParty
+                Provider: GitHub
                 Version: '1'
               Configuration:
-                ConnectionArn: !Ref codestarConnection
-                FullRepositoryId: 
-                  "github"
-                BranchName: !Ref branch
+                OAuthToken: !Ref githubToken
+                Owner: dtelaroli
+                Repo: devops-test
+                Branch: !Ref branch
               OutputArtifacts:
                 - Name: SourceArtifact
               RunOrder: '1'

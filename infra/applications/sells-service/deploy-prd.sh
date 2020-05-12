@@ -2,11 +2,13 @@
 
 set -e
 
-sam package --s3-bucket liftpay-prd-register-service --template-file pipeline.yaml
-sam deploy --s3-bucket liftpay-prd-register-service --stack-name liftpay-register-merchant-service \
-  --template-file pipeline.yaml --capabilities CAPABILITY_IAM \
+GITHUB_TOKEN=$(aws ssm get-parameter --name /config/github/token --with-decryption | jq .Parameter.Value)
+
+sam package --s3-bucket denilson-prd-sells-service --template-file pipeline.yml
+sam deploy --s3-bucket denilson-prd-sells-service --stack-name denilson-prd-sells-service \
+  --template-file pipeline.yml --capabilities CAPABILITY_IAM \
   --parameter-overrides \
-    codestarConnection=/config/global/codestar \
-    env=/config/global/env \
-    region=/config/global/region \
-    branch=/config/global/default-branch
+    env=prd \
+    branch=master \
+    githubToken=$GITHUB_TOKEN
+    

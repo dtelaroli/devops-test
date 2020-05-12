@@ -11,5 +11,5 @@ It's haven't a sandbox environment and its state is saved local and versioned on
 
 ```
 $ make init_prd
-$ make apply_prd
+$ make deploy_prd
 ```
