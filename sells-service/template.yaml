@@ -172,7 +172,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "states:StartExecution"
-                Resource: "*""
+                Resource: "*"
 
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
