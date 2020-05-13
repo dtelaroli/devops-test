@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "aws-vault exec denilson-prd -d 12h -- node .",
+    "start": "node .",
     "api": "node ./src/api/",
     "worker": "node ./src/worker/",
     "test": "echo \"Error: no test specified\" && exit 1"

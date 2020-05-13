@@ -336,6 +336,7 @@ Resources:
                     }
                   }
                 ],
+                "ResultPath": "$.taskresult",
                 "Next": "NotifyShipment"
               },
               "NotifyShipment": {

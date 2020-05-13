@@ -51,7 +51,7 @@ const update = async input => {
 };
 
 const pay = async input => {
-  return sqs(config.SQS_CREATE_ORDER_URL, input);
+  return sqs(config.SQS_CREATE_ORDER_URL, { input });
 };
 
 module.exports = {
