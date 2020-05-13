@@ -135,7 +135,7 @@ Resources:
         PaymentQueue:
           Type: SQS
           Properties:
-            Queue: !Ref PaymentQueue
+            Queue: !GetAtt PaymentQueue.Arn
             BatchSize: !Ref batchSize
             Enabled: true
       Environment:
@@ -155,7 +155,7 @@ Resources:
         PaymentQueue:
           Type: SQS
           Properties:
-            Queue: !Ref ShipmentQueue
+            Queue: !GetAtt ShipmentQueue.Arn
             BatchSize: !Ref batchSize
             Enabled: true
       Environment:
