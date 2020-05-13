@@ -1,7 +1,8 @@
 const paymentModel = require("./payment");
-const shippingModel = require("./shipping");
+const shipmentModel = require("./shipment");
 
 module.exports = {
   paymentModel,
-  shippingModel
+
+  shipmentModel
 };

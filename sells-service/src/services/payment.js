@@ -1,8 +1,8 @@
-const { stepFunctionSuccess, config, post, throwIfError } = require("../lib");
+const { stepFunctionsSuccess, config, post, throwIfError } = require("../lib");
 const { GATEWAY_URL } = config;
 
 const confirmation = async (body) => {
-  return stepFunctionSuccess(body);
+  return stepFunctionsSuccess(body);
 };
 
 const pay = async (body) => {
