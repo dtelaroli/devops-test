@@ -4,7 +4,9 @@ import { HttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 
-const HOST = "denilson-alb-1886319303.us-east-1.elb.amazonaws.com";
+// const HOST = "denilson-alb-1886319303.us-east-1.elb.amazonaws.com";
+
+const HOST = "localhost:4000";
 // Create an http link:
 const httpLink = new HttpLink({
   uri: `http://${HOST}`,

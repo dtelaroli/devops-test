@@ -168,12 +168,12 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: !Ref visibilityTimeout
-      QueueName: sells-service-wait-payment-postback-dead-letter
+      QueueName: sells-service-payment-postback-dead-letter
   PaymentQueue:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: !Ref visibilityTimeout
-      QueueName: sells-service-wait-payment-postback
+      QueueName: sells-service-payment-postback
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt PaymentQueueDLQ.Arn
         maxReceiveCount: !Ref maxReceiveCount
@@ -182,12 +182,12 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: !Ref visibilityTimeout
-      QueueName: sells-service-wait-shipmnent-postback-dead-letter
+      QueueName: sells-service-shipmnent-postback-dead-letter
   ShipmentQueue:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: !Ref visibilityTimeout
-      QueueName: sells-service-wait-shipment-postback
+      QueueName: sells-service-shipment-postback
 
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
