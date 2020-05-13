@@ -269,7 +269,7 @@ Resources:
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
-                  "MessageBody.$": "$.input"
+                  "MessageBody.$": "$"
                 },
                 "End": true
               },
@@ -284,7 +284,7 @@ Resources:
                         "Resource": "arn:aws:states:::sqs:sendMessage",
                         "Parameters": {
                           "QueueUrl": "${sqsNotifyPaymentUrl}",
-                          "MessageBody.$": "$.input"
+                          "MessageBody.$": "$gi"
                         },
                         "End": true
                       }
