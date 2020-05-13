@@ -294,7 +294,6 @@ Resources:
                     "StartAt": "Shipment",
                     "States": {
                       "Shipment": {
-                        "Shipment":{
                         "Type": "Task",
                         "Resource": "${shipmentFunctionArn}",
                         "Retry": [{
