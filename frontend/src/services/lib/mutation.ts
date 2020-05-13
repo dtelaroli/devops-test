@@ -22,16 +22,16 @@ const parseRefetchQueries = (refetchQueries: RefetchQueries = []) => {
   return refetchQueries.map(({ query, variables }) => {
     return {
       query,
-      variables
+      variables,
     };
   });
 };
 
 export default ({ literals, refetchQueries, showSuccess = false, onError }: MutationProps): Array<any> => {
   const [method, result] = useMutation(literals, {
-    refetchQueries: parseRefetchQueries(refetchQueries)
+    refetchQueries: parseRefetchQueries(refetchQueries),
   });
-  const { setLoading, setError, setSuccess } = useContext(GlobalContext);
+  const { setLoading, setError } = useContext(GlobalContext);
 
   const methosVariables = (variables?: any) => {
     return method({ variables });

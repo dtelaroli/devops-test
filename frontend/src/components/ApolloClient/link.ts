@@ -1,21 +1,21 @@
+import { ApolloLink, split } from "apollo-link";
 import { onError } from "apollo-link-error";
-import { split, ApolloLink } from "apollo-link";
 import { HttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
-import { apolloClient } from "./client";
 
+const HOST = "denilson-alb-1886319303.us-east-1.elb.amazonaws.com";
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/"
+  uri: `http://${HOST}`,
 });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:4000/graphql",
+  uri: `ws://${HOST}/graphql`,
   options: {
-    reconnect: true
-  }
+    reconnect: true,
+  },
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

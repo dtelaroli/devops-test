@@ -9,16 +9,16 @@ export const Checkout = () => {
   const [createOrder] = mutationCreateOrder();
 
   const buy = async () => {
-    const [error, result] = await to(
+    const [error, result]: any = await to(
       createOrder({
         input: {
-          value: 99.9
-        }
+          value: 99.9,
+        },
       })
     );
 
     if (result) {
-      history.push("/payment");
+      history.push(`/payment/${result.data.createOrder.id}`);
     }
   };
 

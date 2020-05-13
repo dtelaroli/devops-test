@@ -11,7 +11,7 @@ export const MainRouter = () => {
         <Route exact path="/">
           <Checkout />
         </Route>
-        <Route path="/payment">
+        <Route path="/payment/:id">
           <Payment />
         </Route>
         <Route path="/order">

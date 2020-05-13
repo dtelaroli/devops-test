@@ -53,11 +53,11 @@ Parameters:
   gatewayUrl: 
     Type: "String"
     Description: Gateway URL
-    Default: https://gateway.com
+    Default: https://denilson.free.beeceptor.com
   courierUrl:
     Type: "String"
     Description: Courier URL
-    Default: https://courier.com
+    Default: https://denilson.free.beeceptor.com
 
 Resources:
   API:
