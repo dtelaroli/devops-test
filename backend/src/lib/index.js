@@ -7,7 +7,6 @@ const throwIfError = require("./throw-if-error");
 
 module.exports = {
   config,
-  aws,
   dynamoDB,
   dateUtil,
   pubsub,
