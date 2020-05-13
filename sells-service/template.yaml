@@ -24,11 +24,11 @@ Parameters:
   intervalSeconds:
     Type: "String"
     Description: Default interval in seconds
-    Default: 180
+    Default: 120
   maxAttempts:
     Type: "String"
-    Description: Default maxAttempts in seconds
-    Default: 3
+    Description: Default maxAttempts
+    Default: 1
   backoffRate:
     Type: "String"
     Description: Default backoffRate in seconds

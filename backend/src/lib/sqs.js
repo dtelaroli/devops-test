@@ -1,6 +1,6 @@
-const AWS = require("./aws");
+const { SQS } = require("./aws");
 const { to } = require("await-to-js");
-const sqs = new AWS.SQS();
+const sqs = new SQS();
 
 const send = async (QueueUrl, Message) => {
   const params = {
@@ -9,9 +9,9 @@ const send = async (QueueUrl, Message) => {
     MessageAttributes: {
       contentType: {
         DataType: "String",
-        StringValue: "application/json"
-      }
-    }
+        StringValue: "application/json",
+      },
+    },
   };
 
   return to(sqs.sendMessage(params).promise());

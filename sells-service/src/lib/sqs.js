@@ -1,4 +1,4 @@
-const { AWS } = require("./aws");
+const { SQS } = require("./aws");
 const { to } = require("await-to-js");
 const sqs = new SQS();
 
