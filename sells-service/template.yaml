@@ -213,7 +213,10 @@ Resources:
                   - "sqs:GetQueueAttributes"
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
-                Resource: !Ref sqsCreateArn
+                Resource: 
+                  - !Ref sqsCreateArn
+                  - !GetAtt ShipmentQueue.Arn
+                  - !GetAtt PaymentQueue.Arn
               - Effect: Allow
                 Action:
                   - "states:StartExecution"
