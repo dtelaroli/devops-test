@@ -1,14 +1,7 @@
-const { stepFunctionsStart, parse } = require("../lib");
+const { sellService } = require("../services");
 
-const sell = async (event) => {
-  const results = Promise.all(
-    event.Records.map((record) => {
-      const body = parse(record.body);
-      return stepFunctionsStart(body);
-    })
-  );
-
-  return results;
+const start = async (event) => {
+  return sellService.sell(event.Records);
 };
 
-module.exports = sell;
+module.exports = start;
