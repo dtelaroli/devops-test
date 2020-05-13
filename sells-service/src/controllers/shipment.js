@@ -1,17 +1,7 @@
 const { shipmentService } = require("../services");
 
-const create = async (req, res, next) => {
-  const [error, result] = await shipmentService.create(req.body.id);
-
-  if (error) {
-    return next(error);
-  }
-
-  res.status(200).json(result);
-};
-
 const confirmation = async (req, res, next) => {
-  const [error, result] = await shipmentService.confirmation(req.body.id);
+  const [error, result] = await shipmentService.confirmation(req.body);
 
   if (error) {
     return next(error);
@@ -25,7 +15,6 @@ const send = async (event) => {
 };
 
 module.exports = {
-  create,
   confirmation,
   send,
 };

@@ -1,16 +1,16 @@
-const { config, stepFunctions } = require("../lib");
+const { config, stepFunctionsStart, stringify, parse } = require("../lib");
 
 const sell = async (event) => {
   const results = Promise.all(
     event.Records.map((record) => {
-      const body = JSON.parse(record.body);
+      const body = parse(record.body);
       const params = {
         name: body.id,
         stateMachineArn: config.STATE_MACHINE_ARN,
-        input: JSON.stringify(body),
+        input: stringify(body),
       };
 
-      return stepFunctions.startExecution(params).promise();
+      return stepFunctionsStart(params);
     })
   );
 

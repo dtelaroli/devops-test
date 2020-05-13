@@ -1,18 +1,8 @@
-const { sqs, config, post, throwIfError } = require("../lib");
-const { SQS_NOTIFY_URL, GATEWAY_URL } = config;
+const { stepFunctionSuccess, config, post, throwIfError } = require("../lib");
+const { GATEWAY_URL } = config;
 
-const create = async (id) => {
-  return sqs(SQS_NOTIFY_URL, {
-    id,
-    status: "PAYMENT",
-  });
-};
-
-const confirmation = async (id) => {
-  return sqs(SQS_NOTIFY_URL, {
-    id,
-    status: "PAID",
-  });
+const confirmation = async (body) => {
+  return stepFunctionSuccess(body);
 };
 
 const pay = async (body) => {
@@ -24,7 +14,6 @@ const pay = async (body) => {
 };
 
 module.exports = {
-  create,
   confirmation,
   pay,
 };

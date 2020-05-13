@@ -3,5 +3,6 @@ const stringify = (obj) => {
 };
 
 module.exports = {
+  parse: JSON.parse,
   stringify,
 };

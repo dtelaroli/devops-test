@@ -9,7 +9,7 @@ const throwIfError = require("./throw-if-error");
 module.exports = {
   config,
   sqs,
-  stepFunctions,
+  ...stepFunctions,
   handler,
   ...parse,
   ...http,

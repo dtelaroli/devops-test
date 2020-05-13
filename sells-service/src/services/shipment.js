@@ -1,18 +1,8 @@
-const { sqs, config, post, throwIfError } = require("../lib");
+const { stepFunctionSuccess, config, post, throwIfError } = require("../lib");
 const { COURIER_URL } = config;
 
-const create = async id => {
-  return sqs(SQS_NOTIFY_URL, {
-    id,
-    status: "SHIPPING"
-  });
-};
-
-const confirmation = async id => {
-  return sqs(SQS_NOTIFY_URL, {
-    id,
-    status: "FINISHED"
-  });
+const confirmation = async (body) => {
+  return stepFunctionSuccess(body);
 };
 
 const send = async (body) => {
@@ -24,7 +14,6 @@ const send = async (body) => {
 };
 
 module.exports = {
-  create,
   confirmation,
-  send
+  send,
 };
