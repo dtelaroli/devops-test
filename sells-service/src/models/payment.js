@@ -3,9 +3,12 @@ const { validate } = require("express-validation");
 
 const payment = {
   body: Joi.object({
-    id: Joi.string().required(),
-    status: Joi.string().required(),
+    input: Joi.object({
+      id: Joi.string().required(),
+      cardHash: Joi.string().required(),
+    }),
     taskToken: Joi.string().required(),
+    paid: Joi.string().required()
   }),
 };
 

@@ -3,8 +3,10 @@ const { validate } = require("express-validation");
 
 const shipment = {
   body: Joi.object({
-    id: Joi.string().required(),
-    status: Joi.string().required(),
+    input: Joi.object({
+      id: Joi.string().required(),
+      status: Joi.string().required(),
+    }),
     taskToken: Joi.string().required(),
   }),
 };

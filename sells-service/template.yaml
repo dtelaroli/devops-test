@@ -29,6 +29,18 @@ Parameters:
     Type: "String"
     Description: Default maxAttempts
     Default: 1
+  visibilityTimeout:
+    Type: "String"
+    Description: Default maxAttempts
+    Default: 180
+  maxReceiveCount:
+    Type: "String"
+    Description: Default maxAttempts
+    Default: 3
+  batchSize:
+    Type: "String"
+    Description: Default maxAttempts
+    Default: 10
   backoffRate:
     Type: "String"
     Description: Default backoffRate in seconds
@@ -50,14 +62,14 @@ Parameters:
     Type: "String"
     Description: Cloudfront URL
     Default: https://doman.cloudfront.net
-  gatewayUrl: 
+  gatewayUrl:
     Type: "String"
     Description: Gateway URL
-    Default: https://denilson.free.beeceptor.com
+    Default: https://denilson.free.beeceptor.com/payment
   courierUrl:
     Type: "String"
     Description: Courier URL
-    Default: https://denilson.free.beeceptor.com
+    Default: https://denilson.free.beeceptor.com/shipment
 
 Resources:
   API:
@@ -104,7 +116,7 @@ Resources:
           Type: SQS
           Properties:
             Queue: !Ref sqsCreateArn
-            BatchSize: 10
+            BatchSize: !Ref batchSize
             Enabled: true
       Environment:
         Variables:
@@ -119,6 +131,13 @@ Resources:
       CodeUri: src/
       Handler: handlers/payment.handler
       Runtime: nodejs12.x
+      Events:
+        PaymentQueue:
+          Type: SQS
+          Properties:
+            Queue: !Ref PaymentQueue
+            BatchSize: !Ref batchSize
+            Enabled: true
       Environment:
         Variables:
           REGION: !Ref region
@@ -132,22 +151,42 @@ Resources:
       CodeUri: src/
       Handler: handlers/shipment.handler
       Runtime: nodejs12.x
+      Events:
+        PaymentQueue:
+          Type: SQS
+          Properties:
+            Queue: !Ref ShipmentQueue
+            BatchSize: !Ref batchSize
+            Enabled: true
       Environment:
         Variables:
           REGION: !Ref region
           ENV: !Ref env
           COURIER_URL: !Ref courierUrl
 
-  WaitPaymentPostbackQueue:
+  PaymentQueueDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      VisibilityTimeout: 180
+      VisibilityTimeout: !Ref visibilityTimeout
+      QueueName: sells-service-wait-payment-postback-dead-letter
+  PaymentQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: !Ref visibilityTimeout
       QueueName: sells-service-wait-payment-postback
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt PaymentQueueDLQ.Arn
+        maxReceiveCount: !Ref maxReceiveCount
 
-  WaitShipmentPostbackQueue:
+  ShipmentQueueDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      VisibilityTimeout: 180
+      VisibilityTimeout: !Ref visibilityTimeout
+      QueueName: sells-service-wait-shipmnent-postback-dead-letter
+  ShipmentQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: !Ref visibilityTimeout
       QueueName: sells-service-wait-shipment-postback
 
   LambdaExecutionRole:
@@ -200,21 +239,21 @@ Resources:
               - Effect: Allow
                 Action:
                   - "lambda:InvokeFunction"
-                Resource: 
+                Resource:
                   - !GetAtt PaymentFunction.Arn
                   - !GetAtt ShipmentFunction.Arn
               - Effect: Allow
                 Action:
                   - "sqs:SendMessage"
-                Resource: 
-                  - !GetAtt WaitPaymentPostbackQueue.Arn
-                  - !GetAtt WaitShipmentPostbackQueue.Arn
+                Resource:
+                  - !GetAtt PaymentQueue.Arn
+                  - !GetAtt ShipmentQueue.Arn
                   - !Ref sqsNotifyPaymentArn
               - Effect: Allow
                 Action:
                   - "logs:*"
                 Resource: "*"
-                
+
   SellStateMachine:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
@@ -223,29 +262,14 @@ Resources:
         - |-
           {
             "Comment": "Service to orcherstrate customers registration",
-            "StartAt": "Payment",
+            "StartAt": "PayAndWaitPostback",
             "States": {
-              "Payment": {
-                "Type": "Task",
-                "Resource": "${paymentFunctionArn}",
-                "Retry": [
-                  {
-                    "ErrorEquals": [
-                      "States.All"
-                    ],
-                    "IntervalSeconds": ${intervalSeconds},
-                    "MaxAttempts": ${maxAttempts},
-                    "BackoffRate": ${backoffRate}
-                  }
-                ],
-                "Next": "WaitPaymentPostback"
-              },
-              "WaitPaymentPostback": {
+              "PayAndWaitPostback": {
                 "Type": "Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
                 "HeartbeatSeconds": ${heartbeatSeconds},
                 "Parameters": {
-                  "QueueUrl": "${waitPaymentPostbackQueueUrl}",
+                  "QueueUrl": "${paymentQueueUrl}",
                   "MessageBody": {
                     "input.$": "$.input",
                     "taskToken.$": "$$.Task.Token"
@@ -291,35 +315,24 @@ Resources:
                     }
                   },
                   {
-                    "StartAt": "Shipment",
+                    "StartAt": "ShipAndWaitPostback",
                     "States": {
-                      "Shipment": {
+                      "ShipAndWaitPostback": {
                         "Type": "Task",
-                        "Resource": "${shipmentFunctionArn}",
-                        "Retry": [{
-                          "ErrorEquals": [ "States.All" ],
-                          "IntervalSeconds": ${intervalSeconds},
-                          "MaxAttempts": ${maxAttempts},
-                          "BackoffRate": ${backoffRate}
-                        }],
+                        "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+                        "HeartbeatSeconds": ${heartbeatSeconds},
+                        "Parameters": {
+                          "QueueUrl": "${shipmentQueueUrl}",
+                          "MessageBody": {
+                            "input.$": "$.input",
+                            "taskToken.$": "$$.Task.Token"
+                          }
+                        },
                         "End": true
                       }
                     }
                   }
                 ],
-                "Next": "WaitShipmentPostback"
-              },
-              "WaitShipmentPostback": {
-                "Type": "Task",
-                "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
-                "HeartbeatSeconds": ${heartbeatSeconds},
-                "Parameters": {
-                  "QueueUrl": "${waitShipmentPostbackQueueUrl}",
-                  "MessageBody": {
-                    "input.$": "$.input",
-                    "taskToken.$": "$$.Task.Token"
-                  }
-                },
                 "Next": "NotifyShipment"
               },
               "NotifyShipment": {
@@ -334,15 +347,14 @@ Resources:
             }
           }
         - {
-            paymentFunctionArn: !GetAtt PaymentFunction.Arn,
             shipmentFunctionArn: !GetAtt ShipmentFunction.Arn,
-            waitPaymentPostbackQueueUrl: !Ref WaitPaymentPostbackQueue,
-            waitShipmentPostbackQueueUrl: !Ref WaitShipmentPostbackQueue,
+            paymentQueueUrl: !Ref PaymentQueue,
+            shipmentQueueUrl: !Ref ShipmentQueue,
             sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,
             heartbeatSeconds: !Ref heartbeatSeconds,
             intervalSeconds: !Ref intervalSeconds,
             maxAttempts: !Ref maxAttempts,
-            backoffRate: !Ref backoffRate
+            backoffRate: !Ref backoffRate,
           }
 
 Outputs:
