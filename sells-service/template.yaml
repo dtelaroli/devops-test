@@ -125,12 +125,12 @@ Resources:
           ENV: !Ref env
           GATEWAY_URL: !Ref gatewayUrl
 
-  ShippingFunction:
+  ShipmentFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       Role: !GetAtt LambdaExecutionRole.Arn
       CodeUri: src/
-      Handler: handlers/shipping.handler
+      Handler: handlers/shipment.handler
       Runtime: nodejs12.x
       Environment:
         Variables:
@@ -144,11 +144,11 @@ Resources:
       VisibilityTimeout: 180
       QueueName: sells-service-wait-payment-postback
 
-  WaitShippingPostbackQueue:
+  WaitShipmentPostbackQueue:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 180
-      QueueName: sells-service-wait-shipping-postback
+      QueueName: sells-service-wait-shipment-postback
 
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -202,13 +202,13 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: 
                   - !GetAtt PaymentFunction.Arn
-                  - !GetAtt ShippingFunction.Arn
+                  - !GetAtt ShipmentFunction.Arn
               - Effect: Allow
                 Action:
                   - "sqs:SendMessage"
                 Resource: 
                   - !GetAtt WaitPaymentPostbackQueue.Arn
-                  - !GetAtt WaitShippingPostbackQueue.Arn
+                  - !GetAtt WaitShipmentPostbackQueue.Arn
                   - !Ref sqsNotifyPaymentArn
               - Effect: Allow
                 Action:
@@ -224,16 +224,20 @@ Resources:
           {
             "Comment": "Service to orcherstrate customers registration",
             "StartAt": "Payment",
-            "States":{
+            "States": {
               "Payment": {
                 "Type": "Task",
                 "Resource": "${paymentFunctionArn}",
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
+                "Retry": [
+                  {
+                    "ErrorEquals": [
+                      "States.All"
+                    ],
+                    "IntervalSeconds": ${intervalSeconds},
+                    "MaxAttempts": ${maxAttempts},
+                    "BackoffRate": ${backoffRate}
+                  }
+                ],
                 "Next": "WaitPaymentPostback"
               },
               "WaitPaymentPostback": {
@@ -247,69 +251,94 @@ Resources:
                     "taskToken.$": "$$.Task.Token"
                   }
                 },
-                "Next": "NotifyPayment"
+                "Next": "PaymentOk?"
               },
-              "NotifyPayment": {
+              "PaymentOk?": {
+                "Type": "Choice",
+                "Choices": [
+                  {
+                    "Variable": "$.paid",
+                    "StringEquals": "false",
+                    "Next": "NotifyPaymentFail"
+                  }
+                ],
+                "Default": "PaymentOk"
+              },
+              "NotifyPaymentFail": {
                 "Type": "Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
                   "MessageBody.$": "$.input"
                 },
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
-                "Next": "Shipping"
+                "End": true
               },
-              "Shipping":{
-                "Type": "Task",
-                "Resource": "${shippingFunctionArn}",
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
-                "Next":"WaitShippingPostback"
+              "PaymentOk": {
+                "Type": "Parallel",
+                "Branches": [
+                  {
+                    "StartAt": "NotifyPaymentOk",
+                    "States": {
+                      "NotifyPaymentOk": {
+                        "Type": "Task",
+                        "Resource": "arn:aws:states:::sqs:sendMessage",
+                        "Parameters": {
+                          "QueueUrl": "${sqsNotifyPaymentUrl}",
+                          "MessageBody.$": "$.input"
+                        },
+                        "End": true
+                      }
+                    }
+                  },
+                  {
+                    "StartAt": "Shipment",
+                    "States": {
+                      "Shipment": {
+                        "Shipment":{
+                        "Type": "Task",
+                        "Resource": "${shipmentFunctionArn}",
+                        "Retry": [{
+                          "ErrorEquals": [ "States.All" ],
+                          "IntervalSeconds": ${intervalSeconds},
+                          "MaxAttempts": ${maxAttempts},
+                          "BackoffRate": ${backoffRate}
+                        }],
+                        "End": true
+                      }
+                    }
+                  }
+                ],
+                "Next": "WaitShipmentPostback"
               },
-              "WaitShippingPostback": {
+              "WaitShipmentPostback": {
                 "Type": "Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
                 "HeartbeatSeconds": ${heartbeatSeconds},
                 "Parameters": {
-                  "QueueUrl": "${waitShippingPostbackQueueUrl}",
+                  "QueueUrl": "${waitShipmentPostbackQueueUrl}",
                   "MessageBody": {
                     "input.$": "$",
                     "taskToken.$": "$$.Task.Token"
                   }
                 },
-                "Next": "NotifyShipping"
+                "Next": "NotifyShipment"
               },
-              "NotifyShipping": {
-                "Type":"Task",
+              "NotifyShipment": {
+                "Type": "Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
                   "MessageBody.$": "$"
                 },
-                "Retry": [{
-                  "ErrorEquals": [ "States.All" ],
-                  "IntervalSeconds": ${intervalSeconds},
-                  "MaxAttempts": ${maxAttempts},
-                  "BackoffRate": ${backoffRate}
-                }],
                 "End": true
               }
             }
           }
         - {
             paymentFunctionArn: !GetAtt PaymentFunction.Arn,
-            shippingFunctionArn: !GetAtt ShippingFunction.Arn,
+            shipmentFunctionArn: !GetAtt ShipmentFunction.Arn,
             waitPaymentPostbackQueueUrl: !Ref WaitPaymentPostbackQueue,
-            waitShippingPostbackQueueUrl: !Ref WaitShippingPostbackQueue,
+            waitShipmentPostbackQueueUrl: !Ref WaitShipmentPostbackQueue,
             sqsNotifyPaymentUrl: !Ref sqsNotifyPaymentUrl,
             heartbeatSeconds: !Ref heartbeatSeconds,
             intervalSeconds: !Ref intervalSeconds,
