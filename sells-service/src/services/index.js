@@ -1,7 +1,7 @@
 const paymentService = require("./payment");
-const shippingService = require("./shipping");
+const shipmentService = require("./shipment");
 
 module.exports = {
   paymentService,
-  shippingService
+  shipmentService
 };

@@ -1,7 +1,7 @@
-const { shippingService } = require("../services");
+const { shipmentService } = require("../services");
 
 const create = async (req, res, next) => {
-  const [error, result] = await shippingService.create(req.body.id);
+  const [error, result] = await shipmentService.create(req.body.id);
 
   if (error) {
     return next(error);
@@ -11,7 +11,7 @@ const create = async (req, res, next) => {
 };
 
 const confirmation = async (req, res, next) => {
-  const [error, result] = await shippingService.confirmation(req.body.id);
+  const [error, result] = await shipmentService.confirmation(req.body.id);
 
   if (error) {
     return next(error);
@@ -20,7 +20,12 @@ const confirmation = async (req, res, next) => {
   res.status(200).json(result);
 };
 
+const send = async (event) => {
+  return shipmentService.send(event);
+};
+
 module.exports = {
   create,
   confirmation,
+  send,
 };
