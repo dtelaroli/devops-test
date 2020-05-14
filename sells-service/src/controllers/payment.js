@@ -11,7 +11,7 @@ const confirmation = async (req, res, next) => {
 };
 
 const pay = async (event) => {
-  return paymentService.pay(event.Records);
+  return paymentService.pay(event);
 };
 
 module.exports = {

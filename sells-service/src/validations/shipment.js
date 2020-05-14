@@ -8,6 +8,7 @@ const shipment = {
       status: Joi.string().required(),
     }),
     taskToken: Joi.string().required(),
+    url: Joi.string().required(),
   }),
 };
 

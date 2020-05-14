@@ -26,11 +26,10 @@ app.use(awsServerlessExpressMiddleware.eventContext());
 // Enable CORS for all methods
 // app.use(cors);
 
-const routes = require("../routes");
+const { payment, shipment } = require("../routes");
 
-for (let i in routes) {
-  app.use(`/v1/${i}`, routes[i]);
-}
+app.use(`/v1/payment`, payment);
+app.use(`/v1/shipment`, shipment);
 app.use(errorHandler);
 
 // Export the app object. When executing the application local this does nothing. However,
