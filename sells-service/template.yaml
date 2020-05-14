@@ -345,8 +345,8 @@ Resources:
                     }
                   }
                 ],
-                "Next": "NotifyShipment"
                 "ResultPath": "$.[1]",
+                "Next": "NotifyShipment"
               },
               "NotifyShipment": {
                 "Type": "Task",
