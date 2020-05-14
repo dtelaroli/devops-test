@@ -345,7 +345,6 @@ Resources:
                     }
                   }
                 ],
-                "ResultPath": "$.[1]",
                 "Next": "NotifyShipment"
               },
               "NotifyShipment": {
@@ -353,7 +352,7 @@ Resources:
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
-                  "MessageBody.$": "$.input"
+                  "MessageBody.$": "$.[1]"
                 },
                 "End": true
               }
