@@ -5,10 +5,9 @@ const payment = {
   body: Joi.object({
     input: Joi.object({
       id: Joi.string().required(),
-      cardHash: Joi.string().required(),
+      status: Joi.string().required(),
     }),
     taskToken: Joi.string().required(),
-    paid: Joi.string().required()
   }),
 };
 

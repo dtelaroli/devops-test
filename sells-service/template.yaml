@@ -143,6 +143,7 @@ Resources:
           REGION: !Ref region
           ENV: !Ref env
           GATEWAY_URL: !Ref gatewayUrl
+          API_URL: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}"
 
   ShipmentFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -163,6 +164,7 @@ Resources:
           REGION: !Ref region
           ENV: !Ref env
           COURIER_URL: !Ref courierUrl
+          API_URL: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}"
 
   PaymentQueueDLQ:
     Type: AWS::SQS::Queue
@@ -369,7 +371,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   ApiEndpoint:
     Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}/hello/"
+    Value: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}"
   # StateMachineArn:
   #   Description: "Sell State Machine Arn"
   #   Value: !Ref SellStateMachine

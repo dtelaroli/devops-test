@@ -1,14 +1,10 @@
-const { stepFunctionsStart, parse } = require("../lib");
+const { stepFunctionsStart, parse, toMap } = require("../lib");
 
 const sell = async (records) => {
-  const results = Promise.all(
-    records.map((record) => {
-      const { id } = parse(record.body);
-      return stepFunctionsStart({ name: id, input: record.body });
-    })
-  );
-
-  return results;
+  return toMap(records, (record) => {
+    const { input } = parse(record.body);
+    return stepFunctionsStart({ name: input.id, input: record.body });
+  });
 };
 
 module.exports = {

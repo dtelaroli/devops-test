@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { shipment } = require("../controllers");
-const { shipmentModel } = require("../models");
+const { shipmentValidation } = require("../validations");
 
-router.post("/confirmation", shipmentModel, shipment.confirmation);
+router.post("/confirmation", shipmentValidation, shipment.confirmation);
 
 module.exports = router;

@@ -1,12 +1,13 @@
-const { stepFunctionsSuccess, config, post, throwIfError, stringify } = require("../lib");
+const { stepFunctionsSuccess, config, post, parse, toMap, stringify } = require("../lib");
 const { GATEWAY_URL } = config;
 
-const pay = async (body) => {
-  const [error, result] = await post(GATEWAY_URL, body);
-
-  throwIfError(error);
-
-  return result.data;
+const pay = async (records) => {
+  return toMap(records, async ({ body }) => {
+    const url = `${config.API_URL}/payment/confirmation`;
+    const { input, taskToken } = parse(body);
+    const [error, result] = await post(GATEWAY_URL, { input, taskToken, url });
+    return [error, result.data];
+  });
 };
 
 const confirmation = async (body) => {

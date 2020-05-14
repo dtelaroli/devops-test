@@ -11,7 +11,7 @@ const confirmation = async (req, res, next) => {
 };
 
 const send = async (event) => {
-  return shipmentService.send(event);
+  return shipmentService.send(event.Records);
 };
 
 module.exports = {

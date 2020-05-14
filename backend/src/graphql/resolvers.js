@@ -1,7 +1,7 @@
 const GraphQLJSON = require("graphql-type-json");
 const { GraphQLDateTime } = require("graphql-iso-date");
 
-const { ordersController } = require("../controllers");
+const { ordersController } = require("../resolvers");
 
 const resolvers = {
   JSON: GraphQLJSON,
