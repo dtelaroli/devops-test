@@ -47,7 +47,7 @@ Parameters:
     Default: 2.0
   sqsCreateArn:
     Type: "AWS::SSM::Parameter::Value<String>"
-    Description: SQS Notification Arn
+    Description: SQS Create Order Arn
     Default: /config/api/sqs-create-order
   sqsNotifyPaymentArn:
     Type: "AWS::SSM::Parameter::Value<String>"
@@ -55,7 +55,7 @@ Parameters:
     Default: /config/api/sqs-notify-order
   sqsNotifyPaymentUrl:
     Type: "AWS::SSM::Parameter::Value<String>"
-    Description: SQS Notification Arn
+    Description: SQS Notification Url
     Default: /config/api/sqs-notify-order-url
   frontendUrl:
     # Type: "AWS::SSM::Parameter::Value<String>"
@@ -70,6 +70,10 @@ Parameters:
     Type: "String"
     Description: Courier URL
     Default: https://denilson.free.beeceptor.com/shipment
+  apiUrl:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: API Gateway Url
+    Default:/config/sells-service/api-url
 
 Resources:
   API:
@@ -143,7 +147,7 @@ Resources:
           REGION: !Ref region
           ENV: !Ref env
           GATEWAY_URL: !Ref gatewayUrl
-          API_URL: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}"
+          API_URL: !Ref apiUrl
 
   ShipmentFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -164,7 +168,7 @@ Resources:
           REGION: !Ref region
           ENV: !Ref env
           COURIER_URL: !Ref courierUrl
-          API_URL: !Sub "https://${API}.execute-api.${AWS::Region}.amazonaws.com/${env}"
+          API_URL: !Ref apiUrl
 
   PaymentQueueDLQ:
     Type: AWS::SQS::Queue

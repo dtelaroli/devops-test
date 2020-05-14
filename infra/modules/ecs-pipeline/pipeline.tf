@@ -25,22 +25,22 @@ resource "aws_codepipeline" "this" {
     }
   }
 
-  stage {
-    name = "Approve"
+  # stage {
+  #   name = "Approve"
 
-    action {
-      name     = "Approval"
-      category = "Approval"
-      owner    = "AWS"
-      provider = "Manual"
-      version  = "1"
+  #   action {
+  #     name     = "Approval"
+  #     category = "Approval"
+  #     owner    = "AWS"
+  #     provider = "Manual"
+  #     version  = "1"
 
-      configuration = {
-        NotificationArn    = var.sns_arn
-        CustomData         = "Approve Deploy to ECS"
-      }
-    }
-  }
+  #     configuration = {
+  #       NotificationArn    = var.sns_arn
+  #       CustomData         = "Approve Deploy to ECS"
+  #     }
+  #   }
+  # }
 
   stage {
     name = "Deploy"
