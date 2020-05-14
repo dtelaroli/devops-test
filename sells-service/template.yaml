@@ -303,7 +303,9 @@ Resources:
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
-                  "MessageBody.$": "$.input"
+                  "MessageBody": {
+                    "input.$": "$.input"
+                  }
                 },
                 "End": true
               },
@@ -318,7 +320,9 @@ Resources:
                         "Resource": "arn:aws:states:::sqs:sendMessage",
                         "Parameters": {
                           "QueueUrl": "${sqsNotifyPaymentUrl}",
-                          "MessageBody.$": "$.input"
+                          "MessageBody": {
+                            "input.$": "$.input"
+                          }
                         },
                         "End": true
                       }
@@ -345,6 +349,13 @@ Resources:
                     }
                   }
                 ],
+                "Next": "GetInput"
+              },
+              "GetInput": {
+                "Type": "Pass",
+                "Parameters": {
+                  "input.$": "$[1].input"
+                },
                 "Next": "NotifyShipment"
               },
               "NotifyShipment": {
@@ -352,7 +363,9 @@ Resources:
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
-                  "MessageBody.$": "$.[1]"
+                  "MessageBody": {
+                    "input.$": "$.input"
+                  }
                 },
                 "End": true
               }

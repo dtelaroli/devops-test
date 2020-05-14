@@ -8,8 +8,9 @@ const app = Consumer.create({
   region: config.REGION,
   batchSize: 10,
   handleMessage: async message => {
+    console.log(message)
     const input = JSON.parse(message.Body);
-    await ordersController.mutations.updateOrder({}, { input });
+    await ordersController.mutations.updateOrder({}, input);
   }
 });
 
