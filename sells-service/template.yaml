@@ -284,8 +284,8 @@ Resources:
                 "Type": "Choice",
                 "Choices": [
                   {
-                    "Variable": "$.paid",
-                    "StringEquals": "false",
+                    "Variable": "$.input.status",
+                    "StringEquals": "PAID",
                     "Next": "NotifyPaymentFail"
                   }
                 ],
@@ -327,7 +327,9 @@ Resources:
                         "Parameters": {
                           "QueueUrl": "${shipmentQueueUrl}",
                           "MessageBody": {
-                            "input.$": "$.input",
+                            "input": {
+                              "id.$": "$.input.id"
+                            },
                             "taskToken.$": "$$.Task.Token"
                           }
                         },
