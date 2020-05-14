@@ -226,6 +226,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "states:StartExecution"
+                  - "states:SendTaskSuccess"
                 Resource: "*"
 
   StatesExecutionRole:
@@ -292,10 +293,10 @@ Resources:
                   {
                     "Variable": "$.input.status",
                     "StringEquals": "PAID",
-                    "Next": "NotifyPaymentFail"
+                    "Next": "PaymentOk"
                   }
                 ],
-                "Default": "PaymentOk"
+                "Default": "NotifyPaymentFail"
               },
               "NotifyPaymentFail": {
                 "Type": "Task",
@@ -344,8 +345,8 @@ Resources:
                     }
                   }
                 ],
-                "ResultPath": "$.taskresult",
                 "Next": "NotifyShipment"
+                "ResultPath": "$.[1]",
               },
               "NotifyShipment": {
                 "Type": "Task",
