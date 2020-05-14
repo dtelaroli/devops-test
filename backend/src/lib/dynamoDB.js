@@ -1,5 +1,7 @@
+const config = require("./config");
+
 const { DocumentClient } = require("aws-sdk/clients/dynamodb");
-const ddb = new DocumentClient();
+const ddb = new DocumentClient({ region: config.REGION });
 const { to } = require("await-to-js");
 
 const get = async (TableName, id) => {

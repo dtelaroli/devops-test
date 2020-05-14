@@ -1,6 +1,6 @@
 const { Consumer } = require("sqs-consumer");
 const { config } = require("../lib");
-const { ordersController } = require("../controllers");
+const { ordersController } = require("../resolvers");
 
 const app = Consumer.create({
   queueUrl: config.SQS_NOTIFY_ORDER_URL,

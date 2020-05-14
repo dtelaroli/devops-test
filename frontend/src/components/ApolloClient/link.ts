@@ -4,17 +4,16 @@ import { HttpLink } from "apollo-link-http";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 
-// const HOST = "denilson-alb-1886319303.us-east-1.elb.amazonaws.com";
+const { REACT_APP_API_HOST } = process.env;
 
-const HOST = "localhost:4000";
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: `http://${HOST}`,
+  uri: `http://${REACT_APP_API_HOST}`,
 });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://${HOST}/graphql`,
+  uri: `ws://${REACT_APP_API_HOST}/graphql`,
   options: {
     reconnect: true,
   },
