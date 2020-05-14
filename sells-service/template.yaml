@@ -73,7 +73,7 @@ Parameters:
   apiUrl:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: API Gateway Url
-    Default:/config/sells-service/api-url
+    Default: /config/sells-service/api-url
 
 Resources:
   API:
