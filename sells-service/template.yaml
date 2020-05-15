@@ -74,12 +74,30 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: API Gateway Url
     Default: /config/sells-service/api-url
+  dnsName:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: Api DNS Name
+    Default: /config/base/dns-name
+  dnsZoneId:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: DNS Zone Id
+    Default: /config/base/dns-zone-id
+  acmArn:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: ACM ARN
+    Default: /config/base/certificate-arn
 
 Resources:
   API:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Sub ${env}
+      Domain:
+        BasePath: v1
+        DomainName: !Sub "sells-service.${dnsName}"
+        CertificateArn: !Ref acmArn
+        Route53:
+          HostedZoneId: !Ref dnsZoneId
 
   PostbackFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

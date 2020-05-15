@@ -47,3 +47,9 @@ resource "aws_ssm_parameter" "dns_name" {
   value = local.dns_name
 }
 
+resource "aws_ssm_parameter" "certificate_arn" {
+  name  = "/config/base/certificate-arn"
+  type  = "String"
+  value = aws_acm_certificate.this.arn
+}
+
