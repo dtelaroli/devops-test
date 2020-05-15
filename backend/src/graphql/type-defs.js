@@ -9,6 +9,7 @@ const typeDefs = gql`
     PAYMENT
     PAID
     SHIPPING
+    REJECTED
     FINISHED
   }
 

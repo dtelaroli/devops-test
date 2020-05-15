@@ -11,14 +11,17 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import { Order } from "../../services/models/order";
+import { useStyles } from "./styles";
 
 interface OrderParam {
   order: Order;
-  status: any[]
+  status: any[];
 }
 
 export const OrderView = ({ order, status }: OrderParam) => {
+  const classes = useStyles();
   const parseDate = (date: string) => {
     return new Date(date).toLocaleString("pt-BR");
   };
@@ -32,7 +35,7 @@ export const OrderView = ({ order, status }: OrderParam) => {
         <ListItemText primary="Order number" secondary={order.id} />
       </List>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className={classes.content}>
         <Table aria-label="order history">
           <TableHead>
             <TableRow>
@@ -54,6 +57,10 @@ export const OrderView = ({ order, status }: OrderParam) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Link color="primary" to="/">
+        Back to product
+      </Link>
     </Fragment>
   );
 };

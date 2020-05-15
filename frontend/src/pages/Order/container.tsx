@@ -20,7 +20,7 @@ export const Order = () => {
     setOrder(data);
     setStatus(JSON.parse(data.updateLogs));
     
-    if (Notification.permission == 'granted') {
+    if (Notification.permission === 'granted') {
       window.navigator.serviceWorker.getRegistration().then(function(reg) {
         // @ts-ignore
         reg.showNotification('Hello world!');

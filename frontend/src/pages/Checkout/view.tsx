@@ -24,7 +24,7 @@ export const CheckoutView = ({ buy }: any) => {
     <Fragment>
       <List>
         {productDetails.map((p: any) => {
-          return <ListItemText {...p} />;
+          return <ListItemText {...p} key={p.primary} />;
         })}
       </List>
       <Button variant="contained" color="primary" onClick={buy}>

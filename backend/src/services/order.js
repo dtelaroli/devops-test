@@ -19,7 +19,7 @@ const create = async input => {
     updateLogs: JSON.stringify([
       {
         status: "NEW",
-        date: updatedAt
+        updatedAt: date
       }
     ]),
     ...input
