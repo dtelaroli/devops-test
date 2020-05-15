@@ -50,6 +50,9 @@ variable "secrets" {
 variable "ecs_iam_role_arn" {
 }
 
+variable "certification_arn" {
+}
+
 variable "container_env_vars" {
   default = ""
 }

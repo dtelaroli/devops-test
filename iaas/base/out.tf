@@ -45,3 +45,15 @@ output "alb_security_group_id" {
 output "sns_arn" {
   value = aws_sns_topic.this.arn
 }
+
+output "dns_zone_name" {
+  value = local.dns_name
+}
+
+output "dns_zone_id" {
+  value = data.aws_route53_zone.this.zone_id
+}
+
+output "certification_arn" {
+  value = aws_acm_certificate.this.arn
+}
