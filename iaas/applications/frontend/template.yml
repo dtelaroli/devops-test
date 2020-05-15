@@ -27,6 +27,14 @@ Parameters:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: SNS Notification Arn
     Default: /config/global/sns-notification-arn
+  dnsName:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: Api DNS Name
+    Default: /config/base/dns-name
+  apiDnsName:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: Api DNS Name
+    Default: /config/api/dns-name
 
 Resources:
   Frontend:
@@ -70,20 +78,21 @@ Resources:
       EnablePullRequestPreview: true
       EnvironmentVariables:
         - Name: REACT_APP_API_HOST
-          Value: denilson-alb-1886319303.us-east-1.elb.amazonaws.com
+          Value: !Ref apiDnsName
       Tags:
         - Key: Name
           Value: devopstest-master
         - Key: Branch
           Value: master
 
-  # Domain:
-  #   Type: AWS::Amplify::Domain
-  #   Properties:
-  #     AppId: !GetAtt Frontend.AppId
-  #     DomainName: exemplo.com
-  #     SubDomainSettings:
-  #       - www
+  Domain:
+    Type: AWS::Amplify::Domain
+    Properties:
+      AppId: !GetAtt Frontend.AppId
+      DomainName: !Ref dnsName
+      SubDomainSettings:
+        - BranchName: master
+          Prefix: www
 
   ServiceRole:
     Type: "AWS::IAM::Role"

@@ -10,4 +10,6 @@ sam deploy --s3-bucket denilson-prd-frontend --stack-name denilson-prd-frontend 
   --parameter-overrides \
     env=prd \
     branch=master \
-    githubToken=$GITHUB_TOKEN
+    githubToken=$GITHUB_TOKEN \
+    apiDnsName=/config/api/dns-name \
+    dnsName=/config/base/dns-name

@@ -10,4 +10,7 @@ sam deploy --s3-bucket denilson-dev-frontend --stack-name denilson-dev-frontend 
   --parameter-overrides \
     env=dev \
     branch=develop \
-    githubToken=$GITHUB_TOKEN
+    githubToken=$GITHUB_TOKEN \
+    apiDnsName=/config/api/dns-name \
+    dnsName=/config/base/dns-name
+
