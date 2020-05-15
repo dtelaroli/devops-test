@@ -39,7 +39,7 @@ Resources:
             build:
               commands:
                 - cd frontend
-                - yarn build
+                - npm build
           artifacts:
             baseDirectory: frontend/build
             files:
@@ -49,6 +49,9 @@ Resources:
       Description: DevOps Test Frontend
       IAMServiceRole: !GetAtt ServiceRole.Arn
       Name: denilson-prd-frontend
+      AutoBranchCreationConfig:
+        EnableAutoBuild: true
+        EnablePullRequestPreview: true
       OauthToken: !Ref githubToken
       Repository: https://github.com/dtelaroli/devops-test.git
 
@@ -88,5 +91,5 @@ Resources:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
-                Action: "*"
+                Action: "amplify:*"
                 Resource: "*"
