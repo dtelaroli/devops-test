@@ -65,11 +65,11 @@ Parameters:
   gatewayUrl:
     Type: "String"
     Description: Gateway URL
-    Default: https://denilson.free.beeceptor.com/payment
+    Default: https://denilson.free.beeceptor.com/prd/v1/payment
   courierUrl:
     Type: "String"
     Description: Courier URL
-    Default: https://denilson.free.beeceptor.com/shipment
+    Default: https://denilson.free.beeceptor.com/prd/v1/shipment
   apiUrl:
     Type: "AWS::SSM::Parameter::Value<String>"
     Description: API Gateway Url

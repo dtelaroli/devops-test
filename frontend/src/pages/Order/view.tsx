@@ -14,13 +14,16 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Order } from "../../services/models/order";
 import { useStyles } from "./styles";
+import { Notification } from "../../components/Notification";
 
 interface OrderParam {
   order: Order;
   status: any[];
+  message: any;
+  setMessage: any;
 }
 
-export const OrderView = ({ order, status }: OrderParam) => {
+export const OrderView = ({ order, status, setMessage, message }: OrderParam) => {
   const classes = useStyles();
   const parseDate = (date: string) => {
     return new Date(date).toLocaleString("pt-BR");
@@ -28,6 +31,7 @@ export const OrderView = ({ order, status }: OrderParam) => {
 
   return (
     <Fragment>
+      <Notification {...{ setMessage, message }} />
       <Typography>Thank you for shop with us.</Typography>
       <Typography>Keep calm and wait herem, we are processing you payment and shippment.</Typography>
 
@@ -49,9 +53,9 @@ export const OrderView = ({ order, status }: OrderParam) => {
           </TableHead>
           <TableBody>
             {status.map((row: any) => (
-              <TableRow key={row.name}>
+              <TableRow key={row.updatedAt}>
                 <TableCell>{row.status}</TableCell>
-                <TableCell>{parseDate(row.date || row.updatedAt)}</TableCell>
+                <TableCell>{parseDate(row.updatedAt)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
