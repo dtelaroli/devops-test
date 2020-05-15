@@ -9,16 +9,23 @@ export const Order = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(ORDER);
   const [status, setStatus] = useState([]);
-
+  
   queryGetOrder(id, (o: any) => {
     setOrder(o.getOrder);
     setStatus(JSON.parse(o.getOrder.updateLogs));
   });
-
+  
   subscriptionOnUpdateOrder((o: any) => {
     const data = o.subscriptionData.data.onUpdateOrder;
     setOrder(data);
     setStatus(JSON.parse(data.updateLogs));
+    
+    if (Notification.permission == 'granted') {
+      window.navigator.serviceWorker.getRegistration().then(function(reg) {
+        // @ts-ignore
+        reg.showNotification('Hello world!');
+      }).catch((e) => {console.log(e)});
+    }
   });
 
   return <OrderView {...{ order, status }} />;

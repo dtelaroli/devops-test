@@ -35,9 +35,9 @@ export default (
     if (result.error) {
       setError(result.error);
     }
-    setLoading(result.loading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  setLoading(result.loading);
 
   return result;
 };

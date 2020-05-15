@@ -31,7 +31,7 @@ export default ({ literals, refetchQueries, showSuccess = false, onError }: Muta
   const [method, result] = useMutation(literals, {
     refetchQueries: parseRefetchQueries(refetchQueries),
   });
-  const { setLoading, setError } = useContext(GlobalContext);
+  const { setLoading, setError, setSuccess } = useContext(GlobalContext);
 
   const methosVariables = (variables?: any) => {
     return method({ variables });
@@ -49,11 +49,11 @@ export default ({ literals, refetchQueries, showSuccess = false, onError }: Muta
       }
     }
     if (showSuccess) {
-      setLoading(result.data ? "Operation success" : false);
+      setSuccess(result.data ? "Operation success" : false);
     }
-    setLoading(result.loading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, []);
+  setLoading(result.loading);
 
   return [methosVariables, result];
 };
