@@ -5,7 +5,7 @@ const send = async (records) => {
   return toMap(records, async ({ body }) => {
     const url = `${config.API_URL}/shipment/confirmation`;
     const { input, taskToken } = parse(body);
-    const [error, result] = await post(COURIER_URL, { input, taskToken, url });
+    const [error, result] = await post(COURIER_URL, { input: { ...input, status: "FINISHED" }, taskToken, url });
     return [error, result.data];
   });
 };

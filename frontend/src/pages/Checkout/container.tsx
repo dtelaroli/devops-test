@@ -9,6 +9,7 @@ export const Checkout = () => {
   const [createOrder] = mutationCreateOrder();
 
   const buy = async () => {
+    // eslint-disable-next-line
     const [error, result]: any = await to(
       createOrder({
         input: {

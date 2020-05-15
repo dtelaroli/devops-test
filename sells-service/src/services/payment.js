@@ -5,7 +5,7 @@ const pay = async (records) => {
   return toMap(records, async ({ body }) => {
     const url = `${config.API_URL}/payment/confirmation`;
     const { input, taskToken } = parse(body);
-    const [error, result] = await post(GATEWAY_URL, { input, taskToken, url });
+    const [error, result] = await post(GATEWAY_URL, { input: { ...input, status: "PAID" }, taskToken, url });
     return [error, result.data];
   });
 };
