@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sam Pipeline
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 10
+
+Parameters:
+  env:
+    Type: "String"
+    Description: Env
+    Default: prd
+  region:
+    Type: "String"
+    Description: Region
+    Default: us-east-1
+  branch:
+    Type: String
+    Default: master
+  githubToken:
+    Type: String
+    Default: master
+  snsNotificationArn:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Description: SNS Notification Arn
+    Default: /config/global/sns-notification-arn
+
+Resources:
+  Frontend:
+    Type: AWS::Amplify::App
+    Properties:
+      BuildSpec: |-
+        version: 0.1
+        frontend:
+          phases:
+            build:
+              commands:
+                - cd frontend
+                - yarn build
+          artifacts:
+            baseDirectory: frontend/build
+            files:
+              - '*'
+      # CustomRules:
+      #   - CustomRule
+      Description: DevOps Test Frontend
+      IAMServiceRole: !GetAtt ServiceRole.Arn
+      Name: denilson-prd-frontend
+      OauthToken: !Ref githubToken
+      Repository: https://github.com/dtelaroli/devops-test.git
+
+  Branch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt Frontend.AppId
+      BranchName: master
+      Description: Deploy master branch
+      EnableAutoBuild: true
+      EnablePullRequestPreview: true
+      EnvironmentVariables:
+        - Name: REACT_APP_API_HOST
+          Value: denilson-alb-1886319303.us-east-1.elb.amazonaws.com
+
+  # Domain:
+  #   Type: AWS::Amplify::Domain
+  #   Properties:
+  #     AppId: !GetAtt Frontend.AppId
+  #     DomainName: exemplo.com
+  #     SubDomainSettings:
+  #       - www
+
+  ServiceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: amplify.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: LambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "*"
+                Resource: "*"

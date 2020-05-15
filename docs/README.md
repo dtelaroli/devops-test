@@ -1,4 +1,4 @@
-# Test Local
+# Running Local
  - Redis
 
 # Deploy
@@ -8,3 +8,7 @@
 
 ## backend
   - Github Token Parameter
+
+# Test
+ - abrir o beeceptor https://beeceptor.com/console/denilson
+ - postar no https://reqbin.com
