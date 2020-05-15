@@ -1,6 +1,6 @@
 import { DocumentNode } from "graphql";
-import { apolloClient, gql } from "../../components";
+import { useSubscription } from "react-apollo";
 
-export const subscription = (document: DocumentNode, variables: object) => {
-  return apolloClient.subscribe({ query: document, variables });
+export default (document: DocumentNode, variables: object, onSubscriptionData: any) => {
+  return useSubscription(document, { variables, onSubscriptionData });
 };

@@ -11,8 +11,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { Order } from "../../services/models/order";
 
-export const OrderView = ({ id, rows }: any) => {
+interface OrderParam {
+  order: Order;
+  status: any[]
+}
+
+export const OrderView = ({ order, status }: OrderParam) => {
   const parseDate = (date: string) => {
     return new Date(date).toLocaleString("pt-BR");
   };
@@ -23,7 +29,7 @@ export const OrderView = ({ id, rows }: any) => {
       <Typography>Keep calm and wait herem, we are processing you order.</Typography>
 
       <List>
-        <ListItemText primary="Order number" secondary={id} />
+        <ListItemText primary="Order number" secondary={order.id} />
       </List>
 
       <TableContainer component={Paper}>
@@ -39,10 +45,10 @@ export const OrderView = ({ id, rows }: any) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row: any) => (
+            {status.map((row: any) => (
               <TableRow key={row.name}>
                 <TableCell>{row.status}</TableCell>
-                <TableCell>{parseDate(row.date)}</TableCell>
+                <TableCell>{parseDate(row.date || row.updatedAt)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
