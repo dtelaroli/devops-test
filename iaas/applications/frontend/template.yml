@@ -36,17 +36,15 @@ Resources:
         version: 0.1
         frontend:
           phases:
-            preBuild:
+            build:
               commands:
                 - cd frontend
                 - npm i
-            build:
-              commands:
                 - npm run build
           artifacts:
             baseDirectory: frontend/build
             files:
-              - '*'
+              - '**/*'
           cache:
             paths:
       CustomRules:
@@ -56,11 +54,11 @@ Resources:
       Description: DevOps Test Frontend
       IAMServiceRole: !GetAtt ServiceRole.Arn
       Name: denilson-prd-frontend
-      AutoBranchCreationConfig:
-        EnableAutoBuild: true
-        EnablePullRequestPreview: true
       OauthToken: !Ref githubToken
-      Repository: https://github.com/dtelaroli/devops-test.git
+      Repository: https://github.com/dtelaroli/devops-test
+      Tags:
+        - Key: Name
+          Value: DevOpsTest
 
   Branch:
     Type: AWS::Amplify::Branch
@@ -73,6 +71,11 @@ Resources:
       EnvironmentVariables:
         - Name: REACT_APP_API_HOST
           Value: denilson-alb-1886319303.us-east-1.elb.amazonaws.com
+      Tags:
+        - Key: Name
+          Value: devopstest-master
+        - Key: Branch
+          Value: master
 
   # Domain:
   #   Type: AWS::Amplify::Domain
@@ -93,7 +96,7 @@ Resources:
               Service: amplify.amazonaws.com
             Action: "sts:AssumeRole"
       Policies:
-        - PolicyName: LambdaExecutionPolicy
+        - PolicyName: AmplifyPolicy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
