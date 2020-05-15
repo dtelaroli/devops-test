@@ -29,7 +29,7 @@ export const OrderView = ({ order, status }: OrderParam) => {
   return (
     <Fragment>
       <Typography>Thank you for shop with us.</Typography>
-      <Typography>Keep calm and wait herem, we are processing you order.</Typography>
+      <Typography>Keep calm and wait herem, we are processing you payment and shippment.</Typography>
 
       <List>
         <ListItemText primary="Order number" secondary={order.id} />

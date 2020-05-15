@@ -296,9 +296,9 @@ Resources:
                     "Next": "PaymentOk"
                   }
                 ],
-                "Default": "NotifyPaymentFail"
+                "Default": "NotifyPaymentRejected"
               },
-              "NotifyPaymentFail": {
+              "NotifyPaymentRejected": {
                 "Type": "Task",
                 "Resource": "arn:aws:states:::sqs:sendMessage",
                 "Parameters": {

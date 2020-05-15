@@ -6,6 +6,7 @@ const payment = {
     input: Joi.object({
       id: Joi.string().required(),
       status: Joi.string().required(),
+      cardHash: Joi.string(),
     }),
     taskToken: Joi.string().required(),
     url: Joi.string(),

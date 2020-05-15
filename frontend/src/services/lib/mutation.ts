@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/react-hooks";
 import { DocumentNode } from "graphql";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../../components";
 
 export interface MutationProps {
@@ -37,22 +37,19 @@ export default ({ literals, refetchQueries, showSuccess = false, onError }: Muta
     return method({ variables });
   };
 
-  useEffect(() => {
-    if (result.error) {
-      // @ts-ignore
-      const errors = result.error.networkError?.result?.errors || [result.error];
-      if (onError) {
-        onError(errors);
-      } else {
-        const error = errors.map((error: any) => error.message).join(", ");
-        setError(error);
-      }
+  if (result.error) {
+    // @ts-ignore
+    const errors = result.error.networkError?.result?.errors || [result.error];
+    if (onError) {
+      onError(errors);
+    } else {
+      const error = errors.map((error: any) => error.message).join(", ");
+      setError(error);
     }
-    if (showSuccess) {
-      setSuccess(result.data ? "Operation success" : false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }
+  if (showSuccess) {
+    setSuccess(result.data ? "Operation success" : false);
+  }
   setLoading(result.loading);
 
   return [methosVariables, result];
