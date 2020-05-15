@@ -18,5 +18,5 @@ module "ecs-service" {
   alb_port              = local.alb_port
   alb_security_group_id = local.alb_security_group_id
   ecs_iam_role_arn      = local.ecs_iam_role_arn
-  certification_arn     = local.certificate_arn
+  certificate_arn       = local.certificate_arn
 }

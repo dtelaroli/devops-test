@@ -1,7 +1,7 @@
-resource "aws_route53_record" "backend" {
+resource "aws_route53_record" "this" {
   zone_id = local.dns_zone_id
-  name    = "backend.${local.dns_zone_name}"
+  name    = "${local.name}.${local.dns_zone_name}"
   type    = "CNAME"
   ttl     = "300"
-  records = [local.alb_dns_nameØ]
+  records = [local.alb_dns_name]
 }

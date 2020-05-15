@@ -11,9 +11,9 @@ locals {
   cluster_name          = data.terraform_remote_state.base.outputs.ecs_cluster_name
   alb_arn               = data.terraform_remote_state.base.outputs.alb_arn
   alb_dns_name          = data.terraform_remote_state.base.outputs.alb_dns_name
-  dns_zone_name         = data.terraform_remote_state.base.outputs.dns_name
+  dns_zone_name         = data.terraform_remote_state.base.outputs.dns_zone_name
   dns_zone_id           = data.terraform_remote_state.base.outputs.dns_zone_id
-  certificate_arn = data.terraform_remote_state.base.outputs.certificate_arn
+  certificate_arn       = data.terraform_remote_state.base.outputs.certificate_arn
   alb_security_group_id = data.terraform_remote_state.base.outputs.alb_security_group_id
   alb_port              = 443
   cpu                   = "512"
