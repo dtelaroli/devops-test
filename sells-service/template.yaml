@@ -20,7 +20,7 @@ Parameters:
   heartbeatSeconds:
     Type: "String"
     Description: Default heartbeat in seconds
-    Default: 240
+    Default: 180
   intervalSeconds:
     Type: "String"
     Description: Default interval in seconds
@@ -327,7 +327,10 @@ Resources:
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
                   "MessageBody": {
-                    "input.$": "$.input"
+                    "input": {
+                      "id.$": "$.input.id",
+                      "status": "REJECTED",
+                    }
                   }
                 },
                 "End": true
