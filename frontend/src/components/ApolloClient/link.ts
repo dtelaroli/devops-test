@@ -8,12 +8,12 @@ const { REACT_APP_API_HOST } = process.env;
 
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: `http://${REACT_APP_API_HOST}`,
+  uri: `https://${REACT_APP_API_HOST}`,
 });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://${REACT_APP_API_HOST}/graphql`,
+  uri: `wss://${REACT_APP_API_HOST}/graphql`,
   options: {
     reconnect: true,
   },
