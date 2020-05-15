@@ -20,11 +20,11 @@ Parameters:
   heartbeatSeconds:
     Type: "String"
     Description: Default heartbeat in seconds
-    Default: 300
+    Default: 240
   intervalSeconds:
     Type: "String"
     Description: Default interval in seconds
-    Default: 120
+    Default: 30
   maxAttempts:
     Type: "String"
     Description: Default maxAttempts
@@ -32,7 +32,7 @@ Parameters:
   visibilityTimeout:
     Type: "String"
     Description: Default maxAttempts
-    Default: 180
+    Default: 30
   maxReceiveCount:
     Type: "String"
     Description: Default maxAttempts
@@ -237,7 +237,7 @@ Resources:
                   - "sqs:GetQueueAttributes"
                   - "sqs:ReceiveMessage"
                   - "sqs:DeleteMessage"
-                Resource: 
+                Resource:
                   - !Ref sqsCreateArn
                   - !GetAtt ShipmentQueue.Arn
                   - !GetAtt PaymentQueue.Arn
@@ -303,6 +303,11 @@ Resources:
                     "taskToken.$": "$$.Task.Token"
                   }
                 },
+                "Catch": [{
+                  "ErrorEquals": [ "States.All" ],
+                  "ResultPath": "$.error",
+                  "Next": "NotifyPaymentRejected"
+                }],
                 "Next": "PaymentOk?"
               },
               "PaymentOk?": {
@@ -352,7 +357,6 @@ Resources:
                       "ShipAndWaitPostback": {
                         "Type": "Task",
                         "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
-                        "HeartbeatSeconds": ${heartbeatSeconds},
                         "Parameters": {
                           "QueueUrl": "${shipmentQueueUrl}",
                           "MessageBody": {
