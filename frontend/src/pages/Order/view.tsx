@@ -1,20 +1,9 @@
-import {
-  List,
-  ListItemText,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@material-ui/core";
+import { List, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { Notification, parseDate, parseMoney } from "../../components";
 import { Order } from "../../services/models/order";
 import { useStyles } from "./styles";
-import { Notification } from "../../components/Notification";
 
 interface OrderParam {
   order: Order;
@@ -25,9 +14,6 @@ interface OrderParam {
 
 export const OrderView = ({ order, status, setMessage, message }: OrderParam) => {
   const classes = useStyles();
-  const parseDate = (date: string) => {
-    return new Date(date).toLocaleString("pt-BR");
-  };
 
   return (
     <Fragment>
@@ -36,7 +22,8 @@ export const OrderView = ({ order, status, setMessage, message }: OrderParam) =>
       <Typography>Keep calm and wait herem, we are processing you payment and shippment.</Typography>
 
       <List>
-        <ListItemText primary="Order number" secondary={order.id} />
+        <ListItemText primary="Número do seu pedido" secondary={order.id} />
+        <ListItemText primary="Total amount" secondary={parseMoney(order.value)} />
       </List>
 
       <TableContainer component={Paper} className={classes.content}>

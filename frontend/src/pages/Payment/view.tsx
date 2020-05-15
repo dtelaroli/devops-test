@@ -1,6 +1,8 @@
 import { Button, Grid, List, ListItemText, TextField } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { useStyles } from "./styles";
+import { parseMoney } from "../../components";
+import { PRICE } from "../Checkout/view";
 
 export const PaymentView = ({ id, pay }: any) => {
   const classes = useStyles();
@@ -28,7 +30,7 @@ export const PaymentView = ({ id, pay }: any) => {
     <Fragment>
       <List>
         <ListItemText primary="Número do seu pedido" secondary={id} />
-        <ListItemText primary="Total amount" secondary="R$ 2.000,00" />
+        <ListItemText primary="Total amount" secondary={parseMoney(PRICE * 2)} />
       </List>
 
       <Grid container spacing={4} className={classes.content}>

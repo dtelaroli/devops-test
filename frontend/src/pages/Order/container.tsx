@@ -5,11 +5,23 @@ import queryGetOrder from "../../services/queries/query-get-order";
 import subscriptionOnUpdateOrder from "../../services/subscriptions/subscription-on-update-order";
 import { OrderView } from "./view";
 
-const rejectMessage = (
-  <Fragment>
-    Payment Rejected, <Link to="/" style={{ color: "#fff" }}>click here</Link> to try again
-  </Fragment>
-);
+const getMessage = (status: string) => {
+  switch (status) {
+    case "PAID":
+      return `Order Update: ${status}`;
+
+    default:
+      return (
+        <Fragment>
+          Payment {status},{" "}
+          <Link to="/" style={{ color: "#fff" }}>
+            click here
+          </Link>{" "}
+          to try again
+        </Fragment>
+      );
+  }
+};
 
 export const Order = () => {
   const { id } = useParams();
@@ -27,7 +39,7 @@ export const Order = () => {
     setOrder(data);
     setStatus(JSON.parse(data.updateLogs));
 
-    setMessage(data.status === "REJECTED" ? rejectMessage : `Order Update: ${data.status}`);
+    setMessage(getMessage(data.status));
 
     if (Notification.permission === "granted") {
       window.navigator.serviceWorker

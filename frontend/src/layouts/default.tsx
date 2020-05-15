@@ -2,7 +2,7 @@ import { Container, CssBaseline, Paper, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { DialogDisplay } from "../components";
-import { Wizard } from "../components/Wizard";
+import { Wizard } from "../components";
 import { useStyles } from "./styles";
 
 
@@ -32,7 +32,7 @@ export const DefaultLayout = ({ children }: any) => {
       <DialogDisplay />
       <CssBaseline />
       <Typography component="h1" variant="h5" className={classes.title}>
-        Awesome Checkout
+        Awesome E-Commerce
       </Typography>
       
       <Wizard activeStep={activeStep} steps={steps} />

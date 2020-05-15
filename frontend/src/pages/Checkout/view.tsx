@@ -1,5 +1,8 @@
 import { Button, List, ListItemText } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { parseMoney } from "../../components";
+
+export const PRICE = 999.99;
 
 export const CheckoutView = ({ buy }: any) => {
   const productDetails = [
@@ -13,11 +16,11 @@ export const CheckoutView = ({ buy }: any) => {
     },
     {
       primary: "Unit Price",
-      secondary: "R$ 1.000,00",
+      secondary: parseMoney(PRICE),
     },
     {
       primary: "Total Price",
-      secondary: "R$ 2.000,00",
+      secondary: parseMoney(PRICE * 2),
     },
   ];
   return (
@@ -28,7 +31,7 @@ export const CheckoutView = ({ buy }: any) => {
         })}
       </List>
       <Button variant="contained" color="primary" onClick={buy}>
-        Buy
+        Buy Now
       </Button>
     </Fragment>
   );
