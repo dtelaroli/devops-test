@@ -1,18 +1,21 @@
 import gql from "graphql-tag";
-// query list {
-//   listOrders {
-//     items {
-//       id
-//       value
-//       status
-//       createdAt
-//       updatedAt
-//       updateLogs
-//     }
-//     nextToken
-//     total
-//   }
-// }
+
+export const listOrder = gql`
+  query ListOrder {
+    listOrders {
+      items {
+        id
+        value
+        status
+        createdAt
+        updatedAt
+        updateLogs
+      }
+      nextToken
+      total
+    }
+  }
+`;
 
 export const getOrder = gql`
   query GetOrder($id: ID!) {
