@@ -304,7 +304,7 @@ Resources:
                   }
                 },
                 "Catch": [{
-                  "ErrorEquals": [ "States.All" ],
+                  "ErrorEquals": [ "States.ALL" ],
                   "ResultPath": "$.error",
                   "Next": "NotifyPaymentRejected"
                 }],
