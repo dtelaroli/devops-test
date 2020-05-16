@@ -197,25 +197,25 @@ Before show the screens, it's time to present AWS Step Function, with it you can
 
 https://www.vixcommerce.com.br
 
-![alt product page](./product-page.png)
+![alt product page](./product-page.png #left =350x)
 
 ### Payment page
 
 https://www.vixcommerce.com.br/payment/:id
 
-![alt payment page](./payment-page.png)
+![alt payment page](./payment-page.png #right =350x)
 
 ### Order page
 
 https://www.vixcommerce.com.br/order/:id
 
-![alt order page](./order-page.png)
+![alt order page](./order-page.png#left =350x)
 
 ### Beeceptor gateway post page
 
 https://beeceptor.com/console/denilson
 
-![alt beeceptor gateway post page](./payment-gateway.png)
+![alt beeceptor gateway post page](./payment-gateway.png#right =350x)
 
 ### ReqBin postback payment page
 
@@ -224,13 +224,13 @@ To confirm payment, set payload field status equals PAID ou REJECTED to cancel t
 
 https://reqbin.com
 
-![alt reqbin postback page](./reqbin-postback.png)
+![alt reqbin postback page](./reqbin-postback.png#left=350x)
 
 ### Confirm payment page
 
 https://www.vixcommerce.com.br/order/:id
 
-![alt order page](./payment-confirmation.png)
+![alt order page](./payment-confirmation.png#right=350x)
 
 ### Rejected payment page
 
