@@ -78,7 +78,7 @@ A sample project to demonstrate the tools power to building a real microservice 
 
 All infrastucture have benn built in IaaS. Using Terraform, CloudFormation and SAM.
 
-![](./architecture.svg)
+![](./architecture.svg =350x)
 
 ## Continuous Deployment
 
@@ -88,7 +88,7 @@ Using GitFlow:
 
 - Merge in develop branch start deployment at staging account (No deployed do KISS).
 
-![](./cicd.svg)
+![](./cicd.svg =350x)
 
 # Running Local
 
@@ -197,25 +197,25 @@ Before show the screens, it's time to present AWS Step Function, with it you can
 
 https://www.vixcommerce.com.br
 
-![alt product page](./product-page.png)
+![alt product page](./product-page.png#center =350x)
 
 ### Payment page
 
 https://www.vixcommerce.com.br/payment/:id
 
-![alt payment page](./payment-page.png)
+![alt payment page](./payment-page.png =350x)
 
 ### Order page
 
 https://www.vixcommerce.com.br/order/:id
 
-![alt order page](./order-page.png)
+![alt order page](./order-page.png =350x)
 
 ### Beeceptor gateway post page
 
 https://beeceptor.com/console/denilson
 
-![alt beeceptor gateway post page](./payment-gateway.png)
+![alt beeceptor gateway post page](./payment-gateway.png =350x)
 
 ### ReqBin postback payment page
 
@@ -224,47 +224,47 @@ To confirm payment, set payload field status equals PAID ou REJECTED to cancel t
 
 https://reqbin.com
 
-![alt reqbin postback page](./reqbin-postback.png)
+![alt reqbin postback page](./reqbin-postback.png =350x)
 
 ### Confirm payment page
 
 https://www.vixcommerce.com.br/order/:id
 
-![alt order page](./payment-confirmation.png)
+![alt order page](./payment-confirmation.png =350x)
 
 ### Rejected payment page
 
 https://www.vixcommerce.com.br/order/:id
 
-![alt rejected page](./reject-page.png)
+![alt rejected page](./reject-page.png =350x)
 
 Payment rejected with payment denied
 
-![](./step-rejected.svg)
+![](./step-rejected.svg =350x)
 
 Payment rejected with timeout
 
-![](./step-rejected-timeout.svg)
+![](./step-rejected-timeout.svg =350x)
 
 ### Beeceptor shipment post page
 
 https://beeceptor.com/console/denilson
 
-![alt beeceptor courier post page](./shipment-courier.png)
+![alt beeceptor courier post page](./shipment-courier.png =350x)
 
 ### ReqBin postback shipment page
 
 https://reqbin.com
 
-![alt reqbin postback page](./reqbin-shipment-confirm.png)
+![alt reqbin postback page](./reqbin-shipment-confirm.png =350x)
 
 ### Confirm payment page
 
 https://www.vixcommerce.com.br/order/:id
 
-![alt order page](./shipment-complete.png)
+![alt order page](./shipment-complete.png =350x)
 
-![](./step-complete.svg)
+![](./step-complete.svg =350x)
 
 Backend: https://api.vixcommerce.com.br
 
