@@ -329,7 +329,7 @@ Resources:
                   "MessageBody": {
                     "input": {
                       "id.$": "$.input.id",
-                      "status": "REJECTED",
+                      "status": "REJECTED"
                     }
                   }
                 },
