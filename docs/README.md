@@ -197,13 +197,13 @@ Before show the screens, it's time to present AWS Step Function, with it you can
 
 https://www.vixcommerce.com.br
 
-![alt product page](./product-page.png #left =350x)
+<img alt="product page" width="350" src="./product-page.png" align="left" />
 
 ### Payment page
 
 https://www.vixcommerce.com.br/payment/:id
 
-![alt payment page](./payment-page.png #right =350x)
+<img alt="product page" width="350" src="./payment-page.png" align="right" />
 
 ### Order page
 
