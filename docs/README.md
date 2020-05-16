@@ -191,6 +191,8 @@ The checkout have been built with asyncronous architecture, therefore two action
 
 ## Screens and Sale Workflow
 
+Before show the screens, it's time to present AWS Step Function, with it you can manage workflow without manage the transitions. See more on AWS docs.
+
 ### Product page
 
 https://www.vixcommerce.com.br
@@ -219,6 +221,7 @@ https://beeceptor.com/console/denilson
 
 To confirm payment, set payload field status equals PAID ou REJECTED to cancel the order.
 
+
 https://reqbin.com
 
 ![alt reqbin postback page](./reqbin-postback.png)
@@ -234,6 +237,14 @@ https://www.vixcommerce.com.br/order/:id
 https://www.vixcommerce.com.br/order/:id
 
 ![alt rejected page](./reject-page.png)
+
+Payment rejected with payment denied
+
+![](./step-rejected.svg)
+
+Payment rejected with timeout
+
+![](./step-rejected-timeout.svg)
 
 ### Beeceptor shipment post page
 
@@ -253,6 +264,7 @@ https://www.vixcommerce.com.br/order/:id
 
 ![alt order page](./shipment-complete.png)
 
+![](./step-complete.svg)
 
 Backend: https://api.vixcommerce.com.br
 
