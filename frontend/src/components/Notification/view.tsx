@@ -10,6 +10,7 @@ export const NotificationView = ({ message, handleClose }: any) => {
         horizontal: "right",
       }}
       open={message !== ""}
+      onClose={handleClose}
       autoHideDuration={6000}
       message={message}
       action={

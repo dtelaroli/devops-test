@@ -14,8 +14,8 @@ const getOrder = async (root, { id }) => {
   return order;
 };
 
-const listOrders = async () => {
-  const [error, orderList] = await orderService.list();
+const listOrders = async (root, args) => {
+  const [error, orderList] = await orderService.list(args);
 
   throwIfError(error);
 

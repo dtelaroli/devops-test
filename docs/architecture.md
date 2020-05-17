@@ -32,6 +32,15 @@ $ brew install awscli
 $ aws ssm put-parameter --name /config/github/token --value <GITHUB_TOKEN> --type SecureString
 ```
 
+## Backend
+
+```
+$ cd iaas/backend
+$ make init_prd
+$ make workspaces # for new environments only
+$ make deploy_prd
+```
+
 ## Base
 
 ```

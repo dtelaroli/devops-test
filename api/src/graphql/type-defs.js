@@ -25,13 +25,7 @@ const typeDefs = gql`
 
   type OrderList {
     items: [Order]
-    nextToken: String
-    total: Int
-  }
-
-  type Query {
-    listOrders: OrderList
-    getOrder(id: ID!): Order
+    nextToken: JSON
   }
 
   input CreateOrderInput {
@@ -48,6 +42,11 @@ const typeDefs = gql`
   input PayOrderInput {
     id: ID!
     cardHash: String!
+  }
+
+  type Query {
+    listOrders(nextToken: ID): OrderList
+    getOrder(id: ID!): Order
   }
 
   type Mutation {

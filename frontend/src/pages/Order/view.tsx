@@ -1,8 +1,9 @@
-import { List, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
+import { List, ListItemText, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Notification, parseDate, parseMoney } from "../../components";
 import { Order } from "../../services/models/order";
+import { Confirm } from "./confirm";
 import { useStyles } from "./styles";
 
 interface OrderParam {
@@ -10,17 +11,16 @@ interface OrderParam {
   status: any[];
   message: any;
   setMessage: any;
+  isCart: boolean;
 }
 
-export const OrderView = ({ order, status, setMessage, message }: OrderParam) => {
+export const OrderView = ({ order, status, setMessage, message, isCart }: OrderParam) => {
   const classes = useStyles();
 
   return (
     <Fragment>
       <Notification {...{ setMessage, message }} />
-      <Typography>Thank you for shop with us.</Typography>
-      <Typography>Keep calm and wait herem, we are processing you payment and shippment.</Typography>
-
+      {isCart ? <Confirm /> : null}
       <List>
         <ListItemText primary="Número do seu pedido" secondary={order.id} />
         <ListItemText primary="Total amount" secondary={parseMoney(order.value)} />
@@ -49,8 +49,8 @@ export const OrderView = ({ order, status, setMessage, message }: OrderParam) =>
         </Table>
       </TableContainer>
 
-      <Link color="primary" to="/">
-        Back to product
+      <Link to="/">
+        Back to list
       </Link>
     </Fragment>
   );

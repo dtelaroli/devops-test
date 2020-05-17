@@ -1,10 +1,9 @@
 import { Button, Grid, List, ListItemText, TextField } from "@material-ui/core";
 import React, { Fragment } from "react";
+import { parseMoney, Wizard } from "../../components";
 import { useStyles } from "./styles";
-import { parseMoney } from "../../components";
-import { PRICE } from "../Checkout/view";
 
-export const PaymentView = ({ id, pay }: any) => {
+export const PaymentView = ({ order, pay }: any) => {
   const classes = useStyles();
 
   const inputs = [
@@ -28,9 +27,11 @@ export const PaymentView = ({ id, pay }: any) => {
 
   return (
     <Fragment>
+      <Wizard activeStep={1} />
+
       <List>
-        <ListItemText primary="Número do seu pedido" secondary={id} />
-        <ListItemText primary="Total amount" secondary={parseMoney(PRICE * 2)} />
+        <ListItemText primary="Número do seu pedido" secondary={order.id} />
+        <ListItemText primary="Total amount" secondary={parseMoney(order.value)} />
       </List>
 
       <Grid container spacing={4} className={classes.content}>
@@ -43,7 +44,7 @@ export const PaymentView = ({ id, pay }: any) => {
         })}
       </Grid>
 
-      <Button variant="contained" color="primary" onClick={pay}>
+      <Button variant="outlined" onClick={pay}>
         Pay Order
       </Button>
     </Fragment>

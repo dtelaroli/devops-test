@@ -1,10 +1,8 @@
 import { Button, List, ListItemText } from "@material-ui/core";
 import React, { Fragment } from "react";
-import { parseMoney } from "../../components";
+import { parseMoney, Wizard } from "../../components";
 
-export const PRICE = 999.99;
-
-export const CheckoutView = ({ buy }: any) => {
+export const CheckoutView = ({ buy, price }: any) => {
   const productDetails = [
     {
       primary: "Product",
@@ -16,21 +14,22 @@ export const CheckoutView = ({ buy }: any) => {
     },
     {
       primary: "Unit Price",
-      secondary: parseMoney(PRICE),
+      secondary: parseMoney(price),
     },
     {
       primary: "Total Price",
-      secondary: parseMoney(PRICE * 2),
+      secondary: parseMoney(price * 2),
     },
   ];
   return (
     <Fragment>
+      <Wizard activeStep={0} />
       <List>
         {productDetails.map((p: any) => {
           return <ListItemText {...p} key={p.primary} />;
         })}
       </List>
-      <Button variant="contained" color="primary" onClick={buy}>
+      <Button variant="outlined" onClick={buy}>
         Buy Now
       </Button>
     </Fragment>

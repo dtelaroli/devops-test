@@ -2,21 +2,27 @@
 
 Before show the screens, it's time to present AWS Step Function, with it you can manage workflows without manage the state transitions. See more on AWS docs.
 
-### Product page
+## Orders
 
 https://www.vixcommerce.com.br
+
+<img src="images/orders-page.png" width="350" alt="orders page" />
+
+### Checkout page
+
+https://www.vixcommerce.com.br/checkout
 
 <img src="images/product-page.png" width="350" alt="product page" />
 
 ### Payment page
 
-https://www.vixcommerce.com.br/payment/:id
+https://www.vixcommerce.com.br/checkout/payment
 
 <img src="images/payment-page.png" width="350" alt="payment page" />
 
 ### Order page
 
-https://www.vixcommerce.com.br/order/:id
+https://www.vixcommerce.com.br/checkout/order
 
 <img src="images/order-page.png" width="350" alt="order page" />
 
