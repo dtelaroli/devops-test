@@ -12,4 +12,4 @@ sam deploy --s3-bucket denilson-prd-frontend --stack-name denilson-prd-frontend 
     branch=master \
     githubToken=$GITHUB_TOKEN \
     apiDnsName=/config/api/dns-name \
-    dnsName=/config/base/dns-name
+    dnsName=/config/base/dns-name 

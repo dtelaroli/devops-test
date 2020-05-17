@@ -306,9 +306,19 @@ Resources:
                 "Catch": [{
                   "ErrorEquals": [ "States.ALL" ],
                   "ResultPath": "$.error",
-                  "Next": "NotifyPaymentRejected"
+                  "Next": "SetStatus"
                 }],
                 "Next": "PaymentOk?"
+              },
+              "SetStatus": {
+                "Type": "Pass",
+                "Parameters": {
+                  "input": {
+                    "id.$": "$.input.id",
+                    "status": "CANCELED"
+                  }
+                },
+                "Next": "NotifyPaymentRejected"
               },
               "PaymentOk?": {
                 "Type": "Choice",
@@ -327,10 +337,7 @@ Resources:
                 "Parameters": {
                   "QueueUrl": "${sqsNotifyPaymentUrl}",
                   "MessageBody": {
-                    "input": {
-                      "id.$": "$.input.id",
-                      "status": "REJECTED"
-                    }
+                    "input.$": "$.input"
                   }
                 },
                 "End": true

@@ -1,7 +1,9 @@
 import React from "react";
 import { WizardView } from "./view";
 
-export const Wizard = ({ steps, activeStep }: any) => {
+export const Wizard = ({ activeStep }: any) => {
+  const steps = ["Product detail", "Payment", "Progress"];
+
   return (
     <WizardView
       {...{

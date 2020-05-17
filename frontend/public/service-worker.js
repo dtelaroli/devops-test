@@ -25,7 +25,3 @@ self.addEventListener('install', function(event) {
   // service worker to install, potentially inside
   // of event.waitUntil();
 });
-
-Notification.requestPermission(function(status) {
-  console.log('Notification permission status:', status);
-});

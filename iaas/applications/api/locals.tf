@@ -110,14 +110,6 @@ locals {
           "value" : data.aws_sqs_queue.notify_order.url
         },
         {
-          "name" : "SQS_CREATE_ORDER_URL",
-          "value" : data.aws_sqs_queue.create_order.url
-        },
-        {
-          "name" : "DYNAMO_ORDER_TABLE_NAME",
-          "value" : local.dynamo_table_order
-        },
-        {
           "name" : "MODULE",
           "value" : local.container_name_worker
         },

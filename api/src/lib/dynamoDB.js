@@ -28,8 +28,8 @@ const list = async (TableName, params = {}) => {
     ddb
       .scan({
         TableName,
-        Limit: params.limit,
-        ExclusiveStartKey: params.nextToken
+        Limit: params.limit || 10,
+        ExclusiveStartKey: params.nextToken ? JSON.parse(params.nextToken) : null
       })
       .promise()
   );
@@ -42,11 +42,11 @@ const list = async (TableName, params = {}) => {
     null,
     {
       items: result.Items,
-      nextToken: result.LastEvaluatedKey,
-      total: result.ScannedCount
+      nextToken: result.LastEvaluatedKey ? JSON.stringify(result.LastEvaluatedKey) : null,
     }
   ];
 };
+
 
 const create = async (TableName, Item) => {
   const [error] = await to(ddb.put({ TableName, Item }).promise());

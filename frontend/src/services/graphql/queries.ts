@@ -1,18 +1,16 @@
 import gql from "graphql-tag";
 
-export const listOrder = gql`
-  query ListOrder {
-    listOrders {
+export const listOrders = gql`
+  query ListOrders($nextToken: ID) {
+    listOrders(nextToken: $nextToken) {
       items {
         id
         value
         status
         createdAt
         updatedAt
-        updateLogs
       }
       nextToken
-      total
     }
   }
 `;
