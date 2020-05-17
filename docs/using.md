@@ -1,3 +1,15 @@
+# Documentation
+
+[Home](../README.md)
+
+[Arquitecture](architecture.md)
+
+**Using**
+
+[Screens](screens.md)
+
+[GraphQL API](graphql.md)
+
 # Running Local
 
 ## Authentication
@@ -98,15 +110,3 @@ The checkout have been built with asyncronous architecture, therefore two action
 - Postback: https://sells-service.vixcommerce.com.br/v1/shipment/confirmation
 
 [Next Page](screens.md)
-
-# Documentation
-
-[Home](../README.md)
-
-[Arquitecture](architecture.md)
-
-**Using**
-
-[Screens](screens.md)
-
-[GraphQL API](graphql.md)

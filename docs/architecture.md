@@ -1,3 +1,15 @@
+# Documentation
+
+[Home](../README.md)
+
+**Arquitecture**
+
+[Using](using.md)
+
+[Screens](screens.md)
+
+[GraphQL API](graphql.md)
+
 # Platform
 
 All infrastucture have benn built in IaaS. Using Terraform, CloudFormation and SAM.
@@ -63,15 +75,3 @@ $ make deploy_prd
 ```
 
 [Next Page](using.md)
-
-# Documentation
-
-[Home](../README.md)
-
-**Arquitecture**
-
-[Using](using.md)
-
-[Screens](screens.md)
-
-[GraphQL API](graphql.md)

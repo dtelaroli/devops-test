@@ -34,7 +34,6 @@ locals {
   sqs_notify_visibility_timeout = "300"
   sns_arn                       = data.terraform_remote_state.base.outputs.sns_arn
   dynamo_table_order            = "Order"
-  dynamo_table_order_index      = "byIdCreatedAt"
 
   container_definitions = jsonencode([
     {
@@ -67,10 +66,6 @@ locals {
         {
           "name" : "DYNAMO_ORDER_TABLE_NAME",
           "value" : local.dynamo_table_order
-        },
-        {
-          "name" : "DYNAMO_ORDER_TABLE_NAME_INDEX",
-          "value" : local.dynamo_table_order_index
         },
         {
           "name" : "MODULE",

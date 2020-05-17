@@ -1,3 +1,15 @@
+# Documentation
+
+[Home](../README.md)
+
+[Arquitecture](architecture.md)
+
+[Using](using.md)
+
+[Screens](screens.md)
+
+**GraphQL API**
+
 # GraphQL Queries, Mutations and Subscriptions
 
 Backend: https://api.vixcommerce.com.br
@@ -77,15 +89,3 @@ subscription OnUpdateOrder {
   }
 }
 ```
-
-# Documentation
-
-[Home](../README.md)
-
-[Arquitecture](architecture.md)
-
-[Using](using.md)
-
-[Screens](screens.md)
-
-**GraphQL API**

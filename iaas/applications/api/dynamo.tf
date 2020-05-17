@@ -11,10 +11,10 @@ resource "aws_dynamodb_table" "order" {
     type = "S"
   }
 
-  global_secondary_index {
-    name            = local.dynamo_table_order_index
-    hash_key        = "id"
-    range_key       = "createdAt"
-    projection_type = "ALL"
-  }
+  # global_secondary_index {
+  #   name            = local.dynamo_table_order_index
+  #   hash_key        = "id"
+  #   range_key       = "createdAt"
+  #   projection_type = "ALL"
+  # }
 }
