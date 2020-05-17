@@ -7,7 +7,7 @@ const lambdaHandler = async (event, context, handler) => {
   const [error, result] = await to(handler(event));
 
   if (error) {
-    console.log("Error: ", stringify(error));
+    console.error("Error: ", stringify(error));
     return context.fail(error);
   }
 

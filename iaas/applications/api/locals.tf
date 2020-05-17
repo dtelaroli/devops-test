@@ -88,7 +88,6 @@ locals {
           "awslogs-group" : aws_cloudwatch_log_group.this.name,
           "awslogs-region" : "us-east-1",
           "awslogs-stream-prefix" : local.container_name,
-          "awslogs-multiline-pattern" : "^.+\\d{2}\\:\\d{2}\\:\\d{2}"
         }
       }
     },
@@ -130,7 +129,6 @@ locals {
           "awslogs-group" : aws_cloudwatch_log_group.worker.name,
           "awslogs-region" : "us-east-1",
           "awslogs-stream-prefix" : local.container_name_worker,
-          "awslogs-multiline-pattern" : "^.+\\d{2}\\:\\d{2}\\:\\d{2}"
         }
       }
     }

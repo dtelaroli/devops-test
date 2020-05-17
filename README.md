@@ -60,6 +60,8 @@ This sample project includes an API which sends a message with asyncronous reque
 
 - [ACM - Amazon Certification Manager](https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html)
 
+- [CloudWatch](https://docs.aws.amazon.com/cloudwatch/index.html)
+
 ### CLI
 
 - [aws-vault (99designs)](https://github.com/99designs/aws-vault)
