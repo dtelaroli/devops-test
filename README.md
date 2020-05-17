@@ -1,18 +1,12 @@
 # Documentation
 
-**Home**
-
-[Arquitecture](docs/architecture.md)
-
-[Using](docs/using.md)
-
-[Screens](docs/screens.md)
-
-[GraphQL API](docs/graphql.md)
-
-[Observability and Monitoring](docs/monitoring.md)
-
-[Roadmap](roadmap.md)
+1. Home
+1. [Arquitecture](docs/architecture.md)
+1. [Using](docs/using.md)
+1. [Screens](docs/screens.md)
+1. [GraphQL API](docs/graphql.md)
+1. [Observability and Monitoring](docs/monitoring.md)
+1. [Roadmap](roadmap.md)
 
 # VixCommerce Platform
 

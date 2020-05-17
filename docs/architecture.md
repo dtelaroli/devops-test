@@ -1,18 +1,12 @@
 # Documentation
 
-[Home](../README.md)
-
-**Arquitecture**
-
-[Using](using.md)
-
-[Screens](screens.md)
-
-[GraphQL API](graphql.md)
-
-[Observability and Monitoring](monitoring.md)
-
-[Roadmap](roadmap.md)
+1. [Home](../README.md)
+1. Arquitecture
+1. [Using](using.md)
+1. [Screens](screens.md)
+1. [GraphQL API](graphql.md)
+1. [Observability and Monitoring](monitoring.md)
+1. [Roadmap](roadmap.md)
 
 # Platform
 

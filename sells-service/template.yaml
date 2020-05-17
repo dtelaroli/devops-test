@@ -58,10 +58,9 @@ Parameters:
     Description: SQS Notification Url
     Default: /config/api/sqs-notify-order-url
   frontendUrl:
-    # Type: "AWS::SSM::Parameter::Value<String>"
     Type: "String"
     Description: Cloudfront URL
-    Default: https://doman.cloudfront.net
+    Default: https://www.vixcommerce.com.br
   gatewayUrl:
     Type: "String"
     Description: Gateway URL
@@ -415,7 +414,7 @@ Resources:
           }
 
   APIName:
-    Type: AWS::SSM::Parameter
+    Type: "AWS::SSM::Parameter"
     Properties: 
       DataType: String
       Description: SellService API Name
