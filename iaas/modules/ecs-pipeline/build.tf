@@ -42,42 +42,42 @@ resource "aws_codebuild_source_credential" "this" {
   token       = data.aws_ssm_parameter.token.value
 }
 
-resource "aws_codebuild_webhook" "dev" {
-  count        = replace(var.env, var.name, "") == "-prd" ? 0 : 1
-  project_name = aws_codebuild_project.this.name
+# resource "aws_codebuild_webhook" "dev" {
+#   count        = replace(var.env, var.name, "") == "-prd" ? 0 : 1
+#   project_name = aws_codebuild_project.this.name
 
-  filter_group {
-    filter {
-      type    = "EVENT"
-      pattern = "PULL_REQUEST_UPDATED, PULL_REQUEST_CREATED"
-    }
+#   filter_group {
+#     filter {
+#       type    = "EVENT"
+#       pattern = "PULL_REQUEST_UPDATED, PULL_REQUEST_CREATED"
+#     }
 
-    filter {
-      type                    = "HEAD_REF"
-      pattern                 = "^refs/heads/.*$"
-      exclude_matched_pattern = false
-    }
+#     filter {
+#       type                    = "HEAD_REF"
+#       pattern                 = "^refs/heads/.*$"
+#       exclude_matched_pattern = false
+#     }
 
-    filter {
-      type                    = "BASE_REF"
-      pattern                 = "^refs/heads/master$"
-      exclude_matched_pattern = false
-    }
-  }
+#     filter {
+#       type                    = "BASE_REF"
+#       pattern                 = "^refs/heads/master$"
+#       exclude_matched_pattern = false
+#     }
+#   }
 
-  filter_group {
-    filter {
-      type    = "EVENT"
-      pattern = "PUSH, PULL_REQUEST_MERGED"
-    }
+#   filter_group {
+#     filter {
+#       type    = "EVENT"
+#       pattern = "PUSH, PULL_REQUEST_MERGED"
+#     }
 
-    filter {
-      type                    = "HEAD_REF"
-      pattern                 = "^refs/heads/(develop|release/.*)$"
-      exclude_matched_pattern = false
-    }
-  }
-}
+#     filter {
+#       type                    = "HEAD_REF"
+#       pattern                 = "^refs/heads/(develop|release/.*)$"
+#       exclude_matched_pattern = false
+#     }
+#   }
+# }
 
 resource "aws_codebuild_webhook" "prd" {
   count        = replace(var.env, var.name, "") == "-prd" ? 1 : 0

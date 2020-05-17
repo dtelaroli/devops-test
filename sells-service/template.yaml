@@ -420,7 +420,7 @@ Resources:
       DataType: String
       Description: SellService API Name
       Name: /config/sells-service/api-name
-      Value: !Sub "${AWS::StackName}""
+      Value: !Sub "${AWS::StackName}"
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
