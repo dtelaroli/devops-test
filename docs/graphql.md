@@ -1,18 +1,12 @@
 # Documentation
 
-[Home](../README.md)
-
-[Arquitecture](architecture.md)
-
-[Using](using.md)
-
-[Screens](screens.md)
-
-**GraphQL API**
-
-[Observability and Monitoring](monitoring.md)
-
-[Roadmap](roadmap.md)
+1. [Home](../README.md)
+1. [Arquitecture](architecture.md)
+1. [Using](using.md)
+1. [Screens](screens.md)
+1. GraphQL API
+1. [Observability and Monitoring](monitoring.md)
+1. [Roadmap](roadmap.md)
 
 # GraphQL Queries, Mutations and Subscriptions
 

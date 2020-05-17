@@ -1,18 +1,12 @@
 # Documentation
 
-[Home](../README.md)
-
-[Arquitecture](architecture.md)
-
-**Using**
-
-[Screens](screens.md)
-
-[GraphQL API](graphql.md)
-
-[Observability and Monitoring](monitoring.md)
-
-[Roadmap](roadmap.md)
+1. [Home](../README.md)
+1. [Arquitecture](architecture.md)
+1. Using
+1. [Screens](screens.md)
+1. [GraphQL API](graphql.md)
+1. [Observability and Monitoring](monitoring.md)
+1. [Roadmap](roadmap.md)
 
 # Running Local
 
@@ -32,9 +26,7 @@ $ aws configure
 Services:
 
 - GraphQL API and Playground: http://localhost:4000
-
 - WebSocket Service: ws://localhost:4000/graphql
-
 - SQS Background Worker
 
 ### GraphQL API
@@ -94,11 +86,8 @@ Frontend: https://www.vixcommerce.com.br
 The checkout have been built with asyncronous architecture, therefore two actions to execute out of the app.
 
 1. Payment: It's posted to the mock gateway url and the app wait a postback to notify the customer and proceed to shipment
-
 1. Shipment: It's posted to the mock courier url and the app wait a postback to notify the customer that the product were received
-
 1. The workflow it's managed by AWS Step Functions, explained above
-
 1. All data it's load from websocket, you don't need refrash the page
 
 ### The URLs:
