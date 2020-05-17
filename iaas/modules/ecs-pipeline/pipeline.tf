@@ -19,7 +19,7 @@ resource "aws_codepipeline" "this" {
       output_artifacts = ["imagedefinitions"]
       configuration = {
         S3Bucket             = aws_s3_bucket.this.id
-        S3ObjectKey          = "${aws_codebuild_project.this.name}/definitions.zip"
+        S3ObjectKey          = "${aws_codebuild_project.this.name}/api/definitions.zip"
         PollForSourceChanges = true
       }
     }
