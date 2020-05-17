@@ -2,11 +2,12 @@
 
 1. [Home](../README.md)
 1. Arquitecture
-1. [Using](using.md)
-1. [Screens](screens.md)
-1. [GraphQL API](graphql.md)
-1. [Observability and Monitoring](monitoring.md)
-1. [Roadmap](roadmap.md)
+2. [Pipelines](pipelines.md)
+3. [Using](using.md)
+4. [Screens](screens.md)
+5. [GraphQL API](graphql.md)
+6. [Observability and Monitoring](monitoring.md)
+7. [Roadmap](roadmap.md)
 
 # Platform
 
@@ -87,4 +88,4 @@ $ make workspaces # for new environments only
 $ make deploy_prd
 ```
 
-[Next page](using.md)
+[Next page](pipelines.md)

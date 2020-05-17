@@ -213,6 +213,7 @@ Resources:
                 Owner: dtelaroli
                 Repo: devops-test
                 Branch: !Ref branch
+                PollForSourceChanges: false
               OutputArtifacts:
                 - Name: SourceArtifact
               RunOrder: '1'
@@ -273,6 +274,22 @@ Resources:
                 ChangeSetName: !Sub ${AWS::StackName}-update
                 RoleArn: !GetAtt CloudFormationRole.Arn
               RunOrder: 2
+
+  AppPipelineWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref githubToken
+      Filters:
+        - 
+          JsonPath: "$.ref"
+          MatchEquals: refs/heads/master
+      TargetPipeline: !Ref Pipeline
+      TargetAction: Source
+      Name: PipelineWebhook
+      TargetPipelineVersion: !GetAtt Pipeline.Version
+      RegisterWithThirdParty: true
 
   PipelineNotification:
     Type: AWS::CodeStarNotifications::NotificationRule
