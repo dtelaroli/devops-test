@@ -1,12 +1,13 @@
-## Documentation
+# Documentation
 
 1. [Home](../README.md)
 1. [Arquitecture](architecture.md)
-1. [Using](using.md)
-1. Screens
-1. [GraphQL API](graphql.md)
-1. [Observability and Monitoring](monitoring.md)
-1. [Roadmap](roadmap.md)
+2. [Pipelines](pipelines.md)
+3. [Using](using.md)
+4. Screens
+5. [GraphQL API](graphql.md)
+6. [Observability and Monitoring](monitoring.md)
+7. [Roadmap](roadmap.md)
 
 ## Screens and Sale Workflow
 
