@@ -414,6 +414,14 @@ Resources:
             backoffRate: !Ref backoffRate,
           }
 
+  APIName:
+    Type: AWS::SSM::Parameter
+    Properties: 
+      DataType: String
+      Description: SellService API Name
+      Name: /config/sells-service/api-name
+      Value: !Sub "${AWS::StackName}""
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM

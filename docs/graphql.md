@@ -10,6 +10,10 @@
 
 **GraphQL API**
 
+[Observability and Monitoring](monitoring.md)
+
+[Roadmap](roadmap.md)
+
 # GraphQL Queries, Mutations and Subscriptions
 
 Backend: https://api.vixcommerce.com.br
@@ -89,3 +93,5 @@ subscription OnUpdateOrder {
   }
 }
 ```
+
+[Next page](monitoring.md)

@@ -8,11 +8,24 @@ resource "aws_sns_topic" "this" {
 
 data "aws_iam_policy_document" "this" {
   statement {
+    sid     = "codestart"
     actions = ["sns:Publish"]
 
     principals {
       type        = "Service"
       identifiers = ["codestar-notifications.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.this.arn]
+  }
+
+  statement {
+    sid     = "cloudwatch"
+    actions = ["sns:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudwatch.amazonaws.com"]
     }
 
     resources = [aws_sns_topic.this.arn]

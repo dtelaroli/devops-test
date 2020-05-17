@@ -10,6 +10,10 @@
 
 [GraphQL API](graphql.md)
 
+[Observability and Monitoring](monitoring.md)
+
+[Roadmap](roadmap.md)
+
 # Platform
 
 All infrastucture have benn built in IaaS. Using Terraform, CloudFormation and SAM.
@@ -28,7 +32,7 @@ Using GitFlow:
 
 # Deploy IaaS
 
-The deployment requires an execution order, Terraform and Github Token on AWS SSM Parameter Store.
+The deployment requires an execution order and also requires Terraform and Github Token on AWS SSM Parameter Store.
 
 ## Installing requirements
 
@@ -57,6 +61,8 @@ $ make deploy_prd
 
 ```
 $ cd iaas/base
+$ make init_prd
+$ make workspaces # for new environments only
 $ make deploy_prd
 ```
 
@@ -64,6 +70,8 @@ $ make deploy_prd
 
 ```
 $ cd iaas/frontend
+$ make init_prd
+$ make workspaces # for new environments only
 $ make deploy_prd
 ```
 
@@ -71,7 +79,18 @@ $ make deploy_prd
 
 ```
 $ cd iaas/frontend
+$ make init_prd
+$ make workspaces # for new environments only
 $ make deploy_prd
 ```
 
-[Next Page](using.md)
+## Monitoring
+
+```
+$ cd iaas/frontend
+$ make init_prd
+$ make workspaces # for new environments only
+$ make deploy_prd
+```
+
+[Next page](using.md)

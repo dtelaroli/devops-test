@@ -10,6 +10,10 @@
 
 [GraphQL API](graphql.md)
 
+[Observability and Monitoring](monitoring.md)
+
+[Roadmap](roadmap.md)
+
 ## Screens and Sale Workflow
 
 Before show the screens, it's time to present AWS Step Function, with it you can manage workflows without manage the state transitions. See more on AWS docs.
@@ -103,5 +107,5 @@ The Step Functions logs all inputs, outputs and exceptions.
 </p>
 <hr />
 
-[Next Page](graphql.md)
+[Next page](graphql.md)
 

@@ -6,7 +6,7 @@ const get = id => {
 };
 
 const list = params => {
-  return dynamoDB.list(config.DYNAMO_ORDER_TABLE_NAME, { ...params, index: config.DYNAMO_ORDER_TABLE_NAME_INDEX });
+  return dynamoDB.list(config.DYNAMO_ORDER_TABLE_NAME, params);
 };
 
 const create = async input => {
