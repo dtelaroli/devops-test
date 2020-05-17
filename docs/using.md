@@ -10,6 +10,10 @@
 
 [GraphQL API](graphql.md)
 
+[Observability and Monitoring](monitoring.md)
+
+[Roadmap](roadmap.md)
+
 # Running Local
 
 ## Authentication
@@ -109,4 +113,4 @@ The checkout have been built with asyncronous architecture, therefore two action
 - Gateway: https://denilson.free.beeceptor.com/v1/shipment
 - Postback: https://sells-service.vixcommerce.com.br/v1/shipment/confirmation
 
-[Next Page](screens.md)
+[Next page](screens.md)
