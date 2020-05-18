@@ -1,7 +1,7 @@
 # Documentation
 
 1. Home
-2. [Arquitecture](docs/architecture.md)
+2. [Architecture](docs/architecture.md)
 3. [Pipelines](docs/pipelines.md)
 4. [Using](docs/using.md)
 5. [Screens](docs/screens.md)
