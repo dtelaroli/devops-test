@@ -11,7 +11,7 @@
 
 # VixCommerce Platform
 
-A project to demonstrate the tools power to building a microservice platform with fully managed docker, serverless, CICD, IaaC, message queues, GraphQL and PubSub.
+A project to demonstrate the tools power to build a microservice platform with fully managed docker, serverless, CICD, IaaC, message queues, GraphQL and PubSub.
 
 This sample project includes an API which sends a message with asyncronous request and called back throught a GraphQL subscription.
 

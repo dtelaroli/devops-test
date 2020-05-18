@@ -1,7 +1,7 @@
 # Documentation
 
 1. [Home](../README.md)
-1. Arquitecture
+1. Architecture
 2. [Pipelines](pipelines.md)
 3. [Using](using.md)
 4. [Screens](screens.md)
