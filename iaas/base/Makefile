@@ -16,3 +16,6 @@ deploy_prd:
 	aws-vault exec denilson-prd -d 1h -- terraform workspace select devops-test-prd
 	aws-vault exec denilson-prd -d 1h -- terraform apply
 	
+destroy_prd:
+	aws-vault exec denilson-prd -- terraform destroy
+	echo "Ok"

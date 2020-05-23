@@ -9,6 +9,8 @@ resource "aws_s3_bucket" "this" {
   bucket = "${local.company}-devops"
   acl    = "private"
 
+  force_destroy = true
+
   policy = data.template_file.this.rendered
 
   versioning {
