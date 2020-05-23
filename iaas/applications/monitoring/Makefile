@@ -23,6 +23,6 @@ destroy_dev:
 
 destroy_prd:
 	tfswitch 0.12.24
-	aws-vault exec denilson-dev -d 1h -- terraform workspace select devops-test-prd
-	aws-vault exec denilson-dev -d 1h -- terraform destroy
+	aws-vault exec denilson-prd -d 1h -- terraform workspace select devops-test-prd
+	aws-vault exec denilson-prd -d 1h -- terraform destroy
 
